@@ -6,38 +6,46 @@ using UnityEngine.UI;
 
 public class TimerCountDown : MonoBehaviour
 {
-    Animator Fade_animator;
-    public GameObject FadeObj;
-    Animator Over_animator;
-    public GameObject OverObj;
+    private Animator FadePanel;
+    private Animator GameOverPanel;
 
-    public AnimationController a_Controller;
-    public GaugeController g_Conttroller;
+    public GameConstants GameConstants;
 
     public Text timerText;
-    public float totalTime = 180.0f; // 3 minutes in seconds
-    private float timeRemaining;
+    private float timeRemaining;//ÉQÅ[ÉÄÇÃécÇËéûä‘
 
     private void Awake()
     {
-        Fade_animator = FadeObj.GetComponent<Animator>();
-        Fade_animator.SetBool("isFadeOut", true);
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager instance is null in Start.");
+        }
+        else
+        {
+            Debug.Log("GameManager instance is found in Start.");
+        }
+        AnimatorController animatorController = FindAnyObjectByType<AnimatorController>();
+        if(animatorController != null )
+        {
+            FadePanel = animatorController.FadePanel;
+            GameOverPanel = animatorController.GameOverPanel;
+        }
+        
+        FadePanel.SetBool("isFadeOut", true);
     }
 
     void Start()
     {
-        Fade_animator = FadeObj.GetComponent<Animator>();
-        Over_animator = OverObj.GetComponent<Animator>();
-        timeRemaining = totalTime;
+        timeRemaining = GameConstants.TotalTime;
         UpdateTimerDisplay();
         InvokeRepeating("UpdateTimer", 1.0f, 1.0f);
-        Fade_animator.SetBool("isFadeOut",true);
+        FadePanel.SetBool("isFadeOut",true);
         
     }
 
     void UpdateTimer()
     {
-        Fade_animator.SetBool("isFadeOut", false);
+        FadePanel.SetBool("isFadeOut", false);
         if (timeRemaining > 0)
         {
             timeRemaining -= 1.0f;
@@ -47,8 +55,8 @@ public class TimerCountDown : MonoBehaviour
         {
             // Timer has reached zero
             CancelInvoke("UpdateTimer");
-            Over_animator.SetBool("isOver", true);
-            Invoke("ButtonChoise", 2.0f); ;
+            GameOverPanel.SetBool("isOver", true);
+            Invoke("ButtonChoice", 2.0f); ;
         }
     }
 
@@ -59,35 +67,35 @@ public class TimerCountDown : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    public void ButtonChoise()
+    public void ButtonChoice()
     {
-        Over_animator.SetBool("isChoise", true);
+        GameOverPanel.SetBool("isChoice", true);
     }
 
     public void TitleButton()
     {
-        if (a_Controller.maxObjectsToSpawn == 1)
+        if (GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 1)
         {
-            PlayerPrefs.SetInt("Score_1", g_Conttroller.Score);
+            PlayerPrefs.SetInt("Score_1", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(a_Controller.maxObjectsToSpawn == 2)
+        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 2)
         {
-            PlayerPrefs.SetInt("Score_2", g_Conttroller.Score);
+            PlayerPrefs.SetInt("Score_2", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(a_Controller.maxObjectsToSpawn == 3)
+        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 3)
         {
-            PlayerPrefs.SetInt("Score_3", g_Conttroller.Score);
+            PlayerPrefs.SetInt("Score_3", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-       Fade_animator.SetBool("isFadeOut", true);
+       FadePanel.SetBool("isFadeOut", true);
 
         Invoke("TitleScene", 3.0f);
     }
     public void SelectButton()
     {
-        Fade_animator.SetBool("isFadeOut", true);
+        FadePanel.SetBool("isFadeOut", true);
         Invoke("StageSelectScene", 3.0f);
     }
 

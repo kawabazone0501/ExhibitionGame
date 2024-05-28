@@ -5,67 +5,110 @@ using System.Collections;
 
 public class LongPressButton : MonoBehaviour
 {
-    Animator KB_animator;
-    public GameObject kobaObj;
-
-    public GaugeController g_Controller;
-
-    // ボタンを長押しする時間の閾値
-    public float longPressThreshold = 1.0f;
-
+    [SerializeField]
+    private GameConstants gameConstants;
+    [SerializeField]
+    private GameStateManager gameStateManager;
     // ボタンが押されているかどうかを示すフラグ
     private bool isButtonPressed = false;
-
-    // ボタンが押され始めた時間
-    private float buttonPressedTime = 0.0f;
-
-    public Button gray_Button;
-
-    // ゲージのImage
-    public Image gaugeImage;
-
-    // ゲージの増加速度
-    public float gaugeIncreaseRate = 0.5f;
-
-    // ゲージの最大値
-    public float maxGaugeValue = 1.0f;
-
-    // ゲージの現在の値
+    //// ゲージの現在の値
     private float currentGaugeValue = 0.0f;
 
-    public Animator gray_animator;
-    public Animator phone_animator;
+    private Animator SeitoWhite;
+    private Animator Teacher;
+    private Animator Phone;
 
-    public GameObject grayObj;
-    public GameObject phoneObj;
+    //白の生徒のボタン用Image 
+    [SerializeField]
+    private Button whiteButton;
+    // 白の生徒のゲージの外側用Image
+    [SerializeField]
+    private Image whiteOutGaugeImage;
+    //白の生徒のゲージの内側用Image(FillAmountを弄る方)
+    [SerializeField]
+    private Image whiteInGaugeImage;
+    
+    //参照する白の生徒のボタンImage 
+    public Button WhiteButton => whiteButton;
+    //参照する白の生徒のゲージの外側用Image
+    public Image WhiteOutGaugeImage => whiteOutGaugeImage;
+    //参照する白の生徒のゲージの内側用Image(FillAmountを弄る方)
+    public Image WhiteInGaugeImage => whiteInGaugeImage;
 
     //private bool isGaugeFull_gray = false; // ゲージが満タンかどうかのフラグ
-
+    private void Awake()
+    {
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager instance is null in Start.");
+        }
+        else
+        {
+            Debug.Log("GameManager instance is found in Start.");
+        }
+    }
     private void Start()
     {
-        gray_animator = grayObj.GetComponent<Animator>();
-        phone_animator = phoneObj.GetComponent<Animator>();
-        KB_animator = kobaObj.GetComponent<Animator>();
+
+        AnimatorController animatorController = FindAnyObjectByType<AnimatorController>();
+        if (animatorController != null)
+        {
+            SeitoWhite = animatorController.SeitoWhite;
+            Teacher = animatorController.Teacher;
+            Phone = animatorController.Phone;
+        }
+    }
+
+    public void HideImages()
+    {
+        if (whiteOutGaugeImage != null)
+        {
+            whiteOutGaugeImage.enabled = false;
+        }
+        if (whiteButton != null)
+        {
+            whiteButton.gameObject.SetActive(false);// Button自体を非表示にする
+        }
+        if (whiteInGaugeImage != null)
+        {
+            whiteInGaugeImage.fillAmount = 0.0f;
+            whiteInGaugeImage.enabled = false;
+        }
+    }
+
+    public void ShowImages()
+    {
+        if (whiteOutGaugeImage != null)
+        {
+            whiteOutGaugeImage.enabled = true;
+        }
+        if (whiteButton != null)
+        {
+            whiteButton.gameObject.SetActive(true);
+        }
+        if(whiteInGaugeImage != null)
+        {
+            whiteInGaugeImage.enabled = true;
+        }
     }
 
     // ボタンが押されたときの処理
     public void OnPointerDown()
     {
         isButtonPressed = true;
-        gray_animator.SetBool("isGray", true);
-        phone_animator.SetBool("isSupport", true);
-        phone_animator.SetBool("isCall", false);
-        KB_animator.SetBool("vsGray", true);
-        buttonPressedTime = Time.time;
+        SeitoWhite.SetBool("isWhite", true);
+        Phone.SetBool("isSupport", true);
+        Phone.SetBool("isCall", false);
+        Teacher.SetBool("vsWhite", true);
     }
 
     // ボタンが離されたときの処理
     public void OnPointerUp()
     {
         isButtonPressed = false;
-        phone_animator.SetBool("isSupport", false);
-        phone_animator.SetBool("isCall", true);
-        KB_animator.SetBool("vsGray", false);
+        Phone.SetBool("isSupport", false);
+        Phone.SetBool("isCall", true);
+        Teacher.SetBool("vsWhite", false);
     }
 
     // 更新処理
@@ -73,27 +116,27 @@ public class LongPressButton : MonoBehaviour
     {
         if (isButtonPressed)
         {
-            if (currentGaugeValue < maxGaugeValue)
+            if (currentGaugeValue < gameConstants.GaugeFillAmountThresholdFull)
             {
-                currentGaugeValue += gaugeIncreaseRate * Time.deltaTime;
+                currentGaugeValue += gameConstants.GaugeIncreaseRate * Time.deltaTime;
                 UpdateGauge();
             }
-            else if (gaugeImage.fillAmount >= 0.96f)
+            else if (whiteInGaugeImage.fillAmount >= gameConstants.GaugeFillAmountThreshold)
             {
-                g_Controller.isStudent = false;
-                KB_animator.SetBool("vsGray", false);
-                phone_animator.SetBool("isSupport", false);
+                gameStateManager.IsStudent= false;
+                Teacher.SetBool("vsWhite", false);
+                Phone.SetBool("isSupport", false);
                 isButtonPressed = false;
                 currentGaugeValue = 0.0f;
-                g_Controller.OnGaugeFull_gray();
+                GameManager.Instance.GetGaugeController().OnGaugeFull_gray();
             }
         }
     }
     // ゲージの更新
     private void UpdateGauge()
     {
-        gaugeImage.fillAmount = currentGaugeValue / maxGaugeValue;
+        whiteInGaugeImage.fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;
 
-        gaugeImage.fillAmount=Mathf.Clamp01(gaugeImage.fillAmount);
+        whiteInGaugeImage.fillAmount=Mathf.Clamp01(whiteInGaugeImage.fillAmount);
     }
 }

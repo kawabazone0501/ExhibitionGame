@@ -7,30 +7,21 @@ using UnityEditor;
 
 public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
-    Animator KB_animator;
-    public GameObject kobaObj;
+    private Animator Teacher;
+    [SerializeField]
+    private GameConstants gameConstants;
+    [SerializeField]
+    private GameStateManager gameStateManager;
 
-    public GaugeController g_Controller;
-    
-
-    private RectTransform stickTransform; // スティックのRectTransform
+   private RectTransform stickTransform; // スティックのRectTransform
     private RectTransform backgroundTransform; // スティックの背景のRectTransform
 
     private Vector2 stickStartPosition; // スティックの初期位置
     private Vector2 stickDirection; // スティックの方向
-
-    private float maxStickDistance = 75f; // スティックが動くことができる最大距離
-
     private float totalRotation = 0f; // スティックの総回転量
-    private float rotationThreshold = 360f; // 1周とみなす回転量の閾値
-
-    public Image gaugeImage; // ゲージのイメージ
-    public Image buttonImage;
-    public float increaseAmount = 0.1f; // ゲージの増加量
-
     private Vector2 prevStickDirection; // 前のフレームのスティックの方向
 
-    //private bool isGaugeFull = false; // ゲージが満タンかどうかのフラグ
+   
 
     // 初期位置を記録するための変数
     private Vector2 initialPosition;
@@ -38,11 +29,57 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     // UI画像のRectTransform
     public RectTransform imageRectTransform;
 
-    void Start()
+    [SerializeField]
+    private Image[] purpleGaugeImages; // ゲージとボタンのImages
+    // プロパティを使ってアクセスを提供
+    public Image[] PurpleGaugeImages => purpleGaugeImages;
+
+    //画像を非表示にする+ゲージが満タンになると再び呼ばれるので総回転量をリセットする処理も入れる
+    public void HideImages()
     {
-        KB_animator = kobaObj.GetComponent<Animator>();
+        totalRotation = 0.0f;// 総回転量をリセットする
+        foreach (var image in purpleGaugeImages)
+        {
+            if (image != null)
+            {
+                image.fillAmount = 0.0f;
+                image.enabled = false;
+            }
+           
+        }
+    }
+
+    public void ShowImages()
+    {
+        foreach(var image in purpleGaugeImages)
+        {
+            if(image != null)
+            {
+                image.enabled = true;
+            }
+        }
+    }
+    void Awake()
+    {
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager instance is null in Start.");
+        }
+        else
+        {
+            Debug.Log("GameManager instance is found in Start.");
+        }
+        AnimatorController animatorController = FindAnyObjectByType<AnimatorController>();
+        if (animatorController != null)
+        {
+            Teacher = animatorController.Teacher;
+        }
         stickTransform = transform.GetChild(0).GetComponent<RectTransform>(); // スティックの子要素からRectTransformを取得
         backgroundTransform = GetComponent<RectTransform>(); // スティックの背景のRectTransformを取得
+    }
+
+    void Start()
+    {
         stickStartPosition = stickTransform.anchoredPosition; // スティックの初期位置を取得
         prevStickDirection = Vector2.right; // 初期値を設定
         // UI要素の初期位置を記録する
@@ -52,12 +89,12 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     public void OnPointerDown(PointerEventData eventData)
     {
         OnDrag(eventData);
-        KB_animator.SetBool("vsPurple", true);
+        Teacher.SetBool("vsPurple", true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        KB_animator.SetBool("vsPurple", false);
+        Teacher.SetBool("vsPurple", false);
         stickTransform.anchoredPosition = stickStartPosition; // スティックを初期位置に戻す
         stickDirection = Vector2.zero; // スティックの方向をリセットする
     }
@@ -78,13 +115,13 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
             Vector2 clampPos = movePos - backgroundTransform.sizeDelta / 2f;
 
             // スティックが動くことができる範囲を制限する
-            if (Vector2.Distance(stickStartPosition, clampPos) <= maxStickDistance)
+            if (Vector2.Distance(stickStartPosition, clampPos) <= gameConstants.MaxStickDistance)
             {
                 stickTransform.anchoredPosition = clampPos;
             }
             else
             {
-                stickTransform.anchoredPosition = stickStartPosition + (clampPos - stickStartPosition).normalized * maxStickDistance;
+                stickTransform.anchoredPosition = stickStartPosition + (clampPos - stickStartPosition).normalized * gameConstants.MaxStickDistance;
             }
 
             stickDirection = (stickTransform.anchoredPosition - stickStartPosition).normalized; // スティックの方向を計算する
@@ -97,7 +134,7 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
             prevStickDirection = stickDirection;
 
             // スティックが1周した場合、ゲージを増やしてリセットする
-            if (Mathf.Abs(totalRotation) >= rotationThreshold)
+            if (Mathf.Abs(totalRotation) >= gameConstants.RotationThreshold)
             {
                 IncreaseGauge();
                 totalRotation = 0f; // 総回転量をリセットする
@@ -112,28 +149,28 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
 
     private void IncreaseGauge()
     {
-        if (gaugeImage.fillAmount < 1.0f)
+        if (purpleGaugeImages[1].fillAmount < 1.0f)
         {
             // ゲージの値を増加させる
-            gaugeImage.fillAmount += increaseAmount;
+            purpleGaugeImages[1].fillAmount += gameConstants.PurpleIncreaseAmount;
         }
-        else if (gaugeImage.fillAmount >= 0.96f)
+        else if (purpleGaugeImages[1].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
-            g_Controller.isStudent = false;
-            KB_animator.SetBool("vsPurple", false);
+            gameStateManager.IsStudent = false;
+            Teacher.SetBool("vsPurple", false);
             ResetToInitialPosition();
-            g_Controller.OnGaugeFull_purple();
+            GameManager.Instance.GetGaugeController().OnGaugeFull_purple();
         }
 
 
         // ゲージの値を0から1の範囲にクランプする
-        gaugeImage.fillAmount = Mathf.Clamp01(gaugeImage.fillAmount);
+        purpleGaugeImages[1].fillAmount = Mathf.Clamp01(purpleGaugeImages[1].fillAmount);
     }
 
     // 座標を初期位置にリセットする関数
     public void ResetToInitialPosition()
     {
-        KB_animator.SetBool("vsPurple", false);
+        Teacher.SetBool("vsPurple", false);
         imageRectTransform.anchoredPosition = initialPosition;
     }
 }

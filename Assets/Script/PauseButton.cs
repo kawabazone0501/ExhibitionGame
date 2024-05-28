@@ -10,15 +10,22 @@ public class PauseButton : MonoBehaviour
     private int previousSceneIndex;
     private int max_Button_Current;
 
-    public GameObject Pause_Panel;
-    public Button[] Pause_Buttons;
+    //public GameObject Pause_Panel;
+    //public Button[] Pause_Buttons;
+
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button[] pauseButtons;
+
+    public GameObject PausePanel => pausePanel;
+    public Button[] PauseButtons => pauseButtons;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < pauseButtons.Length; i++)
         {
-            Pause_Buttons[i].gameObject.SetActive(false);
+            pauseButtons[i].gameObject.SetActive(false);
         }
     }
 
@@ -28,12 +35,27 @@ public class PauseButton : MonoBehaviour
 
     }
 
+    public void HideButtons()
+    {
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(false);
+        }
+        foreach (var button in pauseButtons)
+        {
+            if (button != null)
+            {
+                button.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void OnPausePanel()
     {
-        Pause_Panel.SetActive(true);
-        for (int i = 0; i < 3; i++)
+        pausePanel.SetActive(true);
+        for (int i = 0; i < pauseButtons.Length; i++)
         {
-            Pause_Buttons[i].gameObject.SetActive(true);
+            pauseButtons[i].gameObject.SetActive(true);
         }
         Time.timeScale = 0.0f;
     }
@@ -41,10 +63,10 @@ public class PauseButton : MonoBehaviour
     public void OffPausePanel()
     {
         Time.timeScale = 1.0f;
-        Pause_Panel.SetActive(false);
+        PausePanel.SetActive(false);
         for (int i = 0; i < 3; i++)
         {
-            Pause_Buttons[i].gameObject.SetActive(false);
+            pauseButtons[i].gameObject.SetActive(false);
         }
     }
 
