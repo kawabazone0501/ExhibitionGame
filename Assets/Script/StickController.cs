@@ -117,25 +117,25 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
 
     private void IncreaseGauge()
     {
-        if (gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount < 1.0f)
+        if (gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount < 1.0f)
         {
             // ゲージの値を増加させる
             Debug.Log("zouka");
-            gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount += gameConstants.PurpleIncreaseAmount;
+            gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount += gameConstants.PurpleIncreaseAmount;
         }
-        else if (gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        else if (gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             Debug.Log("syuuryou");
             Teacher.SetBool("vsPurple", false);
             ResetToInitialPosition();
             gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
-            GameManager.Instance.GetGaugeController().OnGaugeFull_purple();
+            gameManager.GetGaugeController().OnGaugeFull_purple();
             totalRotation = 0f;
         }
 
 
         // ゲージの値を0から1の範囲にクランプする
-        gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount);
+        gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount);
     }
 
     // 座標を初期位置にリセットする関数

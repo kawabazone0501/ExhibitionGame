@@ -99,9 +99,9 @@ public class GaugeController : MonoBehaviour
         }
 
         score = Bonus + gameConstants.BaseScore + 
-            GameManager.Instance.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
-            GameManager.Instance.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
-            GameManager.Instance.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
+            gameManager.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
+            gameManager.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
+            gameManager.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
 
         Debug.Log("Score");
         Invoke("UpdateCounterText", 1.5f);
@@ -240,7 +240,7 @@ public class GaugeController : MonoBehaviour
         gameStateManager.IsButton1Enabled = false;
         gameStateManager.IsButton2Enabled = false;
 
-        GameManager.Instance.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        gameManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
 
 
         StartCoroutine(RedCoroutine());
@@ -262,7 +262,7 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("isPurple");
         SeitoPurple.SetBool("isPurple", false);
-        GameManager.Instance.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        gameManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
 
          StartCoroutine(PurpleCoroutine());
     }
@@ -271,9 +271,9 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_purple");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (GameManager.Instance.GetAnimationController() != null)
+        if (gameManager.GetAnimationController() != null)
         {
-            GameManager.Instance.GetAnimationController().Restart_Purple();
+            gameManager.GetAnimationController().Restart_Purple();
             
             StopCoroutine(PurpleCoroutine());
         }
@@ -285,7 +285,7 @@ public class GaugeController : MonoBehaviour
         SeitoWhite.SetBool("isWhite", false);
         Phone.SetBool("isCall", false);
          
-        GameManager.Instance.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
+        gameManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
  
         StartCoroutine(WhiteCoroutine());
     }
@@ -294,9 +294,9 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_White");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (GameManager.Instance.GetAnimationController() != null)
+        if (gameManager.GetAnimationController() != null)
         {
-            GameManager.Instance.GetAnimationController().Restart_White();
+            gameManager.GetAnimationController().Restart_White();
             
             StopCoroutine(WhiteCoroutine());
         }

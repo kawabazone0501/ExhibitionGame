@@ -137,6 +137,8 @@ public class AnimationController : MonoBehaviour
                 Debug.Log("no_red");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
+            // ループの最後で yield return null; を呼び出して無限ループを回避
+            yield return null;
         }
     }
 
@@ -186,6 +188,8 @@ public class AnimationController : MonoBehaviour
                 Debug.Log("no_purple");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
+            // ループの最後で yield return null; を呼び出して無限ループを回避
+            yield return null;
         }
     }
 
@@ -222,13 +226,15 @@ public class AnimationController : MonoBehaviour
                         gameConstants.AnimationClips[gameConstants.StudentWHITE].length
                         + gameConstants.WaitAnimationTime
                      );
-                break;
+                
             }
             else
             {
                 Debug.Log("no_gray");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
+            // ループの最後で yield return null; を呼び出して無限ループを回避
+            yield return null;
         }
     }
     
@@ -276,7 +282,7 @@ public class AnimationController : MonoBehaviour
            ref bool isPlaying
         )
     {
-        isPlaying = true;
+        isPlaying = false;
         gameStateManager.IsClear = true;
         StopCoroutine(coroutine);
     }

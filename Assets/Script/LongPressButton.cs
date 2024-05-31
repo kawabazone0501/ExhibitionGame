@@ -61,7 +61,7 @@ public class LongPressButton : MonoBehaviour
                 gameStateManager.IsButtonPressed = false;
                 gameStateManager.IsStudents[gameConstants.StudentWHITE] = false;
                 currentGaugeValue = 0.0f;
-                GameManager.Instance.GetGaugeController().OnGaugeFullWhite();
+                gameManager.GetGaugeController().OnGaugeFullWhite();
             }
         }
     }

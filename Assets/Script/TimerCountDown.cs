@@ -65,19 +65,19 @@ public class TimerCountDown : MonoBehaviour
 
     public void TitleButton()
     {
-        if (GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSeason)
+        if (gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSeason)
         {
-            PlayerPrefs.SetInt("Score_1", GameManager.Instance.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_1", gameManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSeason)
+        else if(gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSeason)
         {
-            PlayerPrefs.SetInt("Score_2", GameManager.Instance.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_2", gameManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSeason)
+        else if(gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSeason)
         {
-            PlayerPrefs.SetInt("Score_3", GameManager.Instance.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_3", gameManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
        FadePanel.SetBool("isFadeIn", true);
