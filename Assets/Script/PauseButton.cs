@@ -8,71 +8,46 @@ using UnityEngine.UI;
 public class PauseButton : MonoBehaviour
 {
     private int previousSceneIndex;
-    private int max_Button_Current;
 
-    //public GameObject Pause_Panel;
-    //public Button[] Pause_Buttons;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameConstants gameConstants;
 
-    [SerializeField] private GameObject pausePanel;
-    [SerializeField] private Button[] pauseButtons;
-
-    public GameObject PausePanel => pausePanel;
-    public Button[] PauseButtons => pauseButtons;
-
+    private Animator FadePanel;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        for (int i = 0; i < pauseButtons.Length; i++)
+        AnimatorController animatorController = gameManager.GetComponent<AnimatorController>();
+        if(animatorController != null )
         {
-            pauseButtons[i].gameObject.SetActive(false);
+            FadePanel = animatorController.FadePanel;
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void HideButtons()
-    {
-        if (pausePanel != null)
-        {
-            pausePanel.SetActive(false);
-        }
-        foreach (var button in pauseButtons)
-        {
-            if (button != null)
-            {
-                button.gameObject.SetActive(false);
-            }
-        }
-    }
-
+    
     public void OnPausePanel()
     {
-        pausePanel.SetActive(true);
-        for (int i = 0; i < pauseButtons.Length; i++)
-        {
-            pauseButtons[i].gameObject.SetActive(true);
-        }
+       gameManager.PauseShow(6,8);
         Time.timeScale = 0.0f;
     }
 
     public void OffPausePanel()
     {
         Time.timeScale = 1.0f;
-        PausePanel.SetActive(false);
-        for (int i = 0; i < 3; i++)
-        {
-            pauseButtons[i].gameObject.SetActive(false);
-        }
+        gameManager.PauseHide(6,8);
     }
 
-    public void OnSelectLoad()
+    public void OnSelectButton()
     {
         Time.timeScale = 1.0f;
+
+        FadePanel.SetBool("isFadeIn", true);
+        StartCoroutine(OnSelectLoad());
+    }
+
+    private IEnumerator OnSelectLoad()
+    {
+        yield return new WaitForSeconds(gameConstants.FadeWaitTime);
         // 前のシーンのインデックスを取得する
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
 
@@ -80,9 +55,16 @@ public class PauseButton : MonoBehaviour
         SceneManager.LoadScene(previousSceneIndex);
     }
 
-    public void OnTitleLoad()
+    public void OnTitleButton()
     {
         Time.timeScale = 1.0f;
+        FadePanel.SetBool("isFadeIn", true);
+        StartCoroutine(OnTitleLoad());
+    }
+
+    public IEnumerator OnTitleLoad()
+    {
+        yield return new WaitForSeconds(gameConstants.FadeWaitTime); 
         // 前のシーンのインデックスを取得する
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 2;
 

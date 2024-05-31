@@ -3,42 +3,40 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor.Tilemaps;
 
 public class SelectStageController : MonoBehaviour
 {
-    public AudioSource audioSource;
+    [SerializeField] private GameConstants gameConstants;
 
     Animator Fade_animator;
-    public GameObject FadeObj;
+    [SerializeField] private GameObject FadeObj;
 
     Animator animator;
 
-    public Text[] highScoreTexts;
+    [SerializeField] private Text[] highScoreTexts;
 
-    public GameObject profileObj;
+    [SerializeField] private GameObject profileObj;
 
-    public Button[] CloseButtons;
+    [SerializeField] private Button[] CloseButtons;
 
-    public int MaxSpawn;
+    private int MaxSpawn;
+    [SerializeField] private int[] season;
+    public int[] Season => season;
 
-    public int Score_first;
-    public int Score_second;
-    public int Score_third;
-
-    private int Profile_current;
-
-    public int[] MaxScores;
-
+    [SerializeField] private int[] maxScores;
+    public int[] MaxScores => maxScores;
+    
+    private int profileCurrent;
 
 
 
     private void Awake()
     {
-        Score_first = PlayerPrefs.GetInt("Score_1", 0);
-        Score_second = PlayerPrefs.GetInt("Score_2", 0);
-        Score_third = PlayerPrefs.GetInt("Score_3", 0);
-        // AudioSourceコンポーネントを取得
-        audioSource = GetComponent<AudioSource>();
+        Season[gameConstants.FirstScore] = PlayerPrefs.GetInt("Score_1", 0);
+        Season[gameConstants.SecondScore] = PlayerPrefs.GetInt("Score_2", 0);
+        Season[gameConstants.ThirdScore] = PlayerPrefs.GetInt("Score_3", 0);
+        
         Fade_animator = FadeObj.GetComponent<Animator>();
         Fade_animator.SetBool("isFadeOut", true);
     }
@@ -47,26 +45,23 @@ public class SelectStageController : MonoBehaviour
     void Start()
     {
         animator = profileObj.GetComponent<Animator>();
-        audioSource.loop = true;
-        // オーディオを再生する
-        audioSource.Play();
 
-        if (Score_first > MaxScores[0])
+        if (Season[gameConstants.FirstScore] > MaxScores[gameConstants.FirstScore])
         {
-            MaxScores[0] = Score_first;
-            PlayerPrefs.SetInt("HighScore_1", MaxScores[0]);
+            MaxScores[gameConstants.FirstScore] = Season[gameConstants.FirstScore];
+            PlayerPrefs.SetInt("HighScore_1", MaxScores[gameConstants.FirstScore]);
             PlayerPrefs.Save();
         }
-        if (Score_second > MaxScores[1])
+        if (Season[gameConstants.SecondScore] > MaxScores[gameConstants.SecondScore])
         {
-            MaxScores[1] = Score_second;
-            PlayerPrefs.SetInt("HighScore_2", MaxScores[1]);
+            MaxScores[gameConstants.SecondScore] = Season[gameConstants.SecondScore];
+            PlayerPrefs.SetInt("HighScore_2", MaxScores[gameConstants.SecondScore]);
             PlayerPrefs.Save();
         }
-        if (Score_third > MaxScores[2])
+        if (Season[gameConstants.ThirdScore] > MaxScores[gameConstants.ThirdScore])
         {
-            MaxScores[2] = Score_third;
-            PlayerPrefs.SetInt("HighScore_3", MaxScores[2]);
+            MaxScores[gameConstants.ThirdScore] = Season[gameConstants.ThirdScore];
+            PlayerPrefs.SetInt("HighScore_3", MaxScores[gameConstants.ThirdScore]);
             PlayerPrefs.Save();
         }
 
@@ -74,7 +69,7 @@ public class SelectStageController : MonoBehaviour
     }
     void UpdateHighScoreText()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < highScoreTexts.Length; i++)
         {
             highScoreTexts[i].text = "High Score: " + MaxScores[i].ToString("N0");
         }
@@ -88,28 +83,28 @@ public class SelectStageController : MonoBehaviour
     public void First_Season()
     {
         Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = 1;
+        MaxSpawn = gameConstants.FirstScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", 3.0f);
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
 
     public void Second_Season()
     {
         Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = 2;
+        MaxSpawn = gameConstants.SecondScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", 3.0f);
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
 
     public void Third_Season()
     {
         Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = 3;
+        MaxSpawn = gameConstants.ThirdScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", 3.0f);
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
 
     public void LoadGameScene()
@@ -117,37 +112,37 @@ public class SelectStageController : MonoBehaviour
         SceneManager.LoadScene("GameScene");
     }
 
-    public void Red_Call()
+    public void RedCall()
     {
         animator.SetBool("isRed", true);
-        Profile_current = 0;
-        Invoke("Open_profile", 1.0f);
+        profileCurrent = gameConstants.StudentRED;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
-    public void Purple_Call()
+    public void PurpleCall()
     {
         animator.SetBool("isPurple", true);
-        Profile_current = 1;
-        Invoke("Open_profile", 1.0f);
+        profileCurrent = gameConstants.StudentPURPLE;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
-    public void White_Call()
+    public void WhiteCall()
     {
         animator.SetBool("isWhite", true);
-        Profile_current = 2;
-        Invoke("Open_profile", 1.0f);
+        profileCurrent = gameConstants.StudentWHITE;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
-    public void Kobayashi_Call()
+    public void TeacherCall()
     {
         animator.SetBool("isKobayashi", true);
-        Profile_current = 3;
-        Invoke("Open_profile", 1.0f);
+        profileCurrent = gameConstants.Teacher;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
-    public void Open_profile()
+    public void OpenProfile()
     {
-        CloseButtons[Profile_current].gameObject.SetActive(true);
+        CloseButtons[profileCurrent].gameObject.SetActive(true);
     }
-    public void Close_profile()
+    public void CloseProfile()
     {
-        CloseButtons[Profile_current].gameObject.SetActive(false);
+        CloseButtons[profileCurrent].gameObject.SetActive(false);
         animator.SetBool("isRed", false);
         animator.SetBool("isPurple", false);
         animator.SetBool("isWhite", false);

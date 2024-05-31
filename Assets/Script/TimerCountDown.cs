@@ -8,22 +8,13 @@ public class TimerCountDown : MonoBehaviour
 {
     private Animator FadePanel;
     private Animator GameOverPanel;
-
-    public GameConstants GameConstants;
-
-    public Text timerText;
+    [SerializeField] private GameConstants gameConstants;
+    [SerializeField] private GameManager gameManager;
     private float timeRemaining;//ÉQÅ[ÉÄÇÃécÇËéûä‘
 
     private void Awake()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("GameManager instance is null in Start.");
-        }
-        else
-        {
-            Debug.Log("GameManager instance is found in Start.");
-        }
+        
         AnimatorController animatorController = FindAnyObjectByType<AnimatorController>();
         if(animatorController != null )
         {
@@ -36,7 +27,7 @@ public class TimerCountDown : MonoBehaviour
 
     void Start()
     {
-        timeRemaining = GameConstants.TotalTime;
+        timeRemaining = gameConstants.TotalTime;
         UpdateTimerDisplay();
         InvokeRepeating("UpdateTimer", 1.0f, 1.0f);
         FadePanel.SetBool("isFadeOut",true);
@@ -56,7 +47,7 @@ public class TimerCountDown : MonoBehaviour
             // Timer has reached zero
             CancelInvoke("UpdateTimer");
             GameOverPanel.SetBool("isOver", true);
-            Invoke("ButtonChoice", 2.0f); ;
+            Invoke("ButtonChoice", gameConstants.ButtonDisplayWaitingTime); ;
         }
     }
 
@@ -64,7 +55,7 @@ public class TimerCountDown : MonoBehaviour
     {
         int minutes = Mathf.FloorToInt(timeRemaining / 60);
         int seconds = Mathf.FloorToInt(timeRemaining % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        gameManager.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void ButtonChoice()
@@ -74,38 +65,40 @@ public class TimerCountDown : MonoBehaviour
 
     public void TitleButton()
     {
-        if (GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 1)
+        if (GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSeason)
         {
             PlayerPrefs.SetInt("Score_1", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 2)
+        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSeason)
         {
             PlayerPrefs.SetInt("Score_2", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == 3)
+        else if(GameManager.Instance.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSeason)
         {
             PlayerPrefs.SetInt("Score_3", GameManager.Instance.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-       FadePanel.SetBool("isFadeOut", true);
+       FadePanel.SetBool("isFadeIn", true);
 
-        Invoke("TitleScene", 3.0f);
+        StartCoroutine(TitleSceneLoad());
     }
     public void SelectButton()
     {
-        FadePanel.SetBool("isFadeOut", true);
-        Invoke("StageSelectScene", 3.0f);
+       FadePanel.SetBool("isFadeIn", true);
+       StartCoroutine(SelectSceneLoad());
     }
 
-    public void SelectScene()
+    private IEnumerator SelectSceneLoad()
     {
+        yield return new WaitForSeconds(gameConstants.FadeWaitTime);
         SceneManager.LoadScene("StageSelectScene");
     }
 
-    public void TitleScene()
+    private IEnumerator TitleSceneLoad()
     {
+        yield return new WaitForSeconds(gameConstants.FadeWaitTime);
         SceneManager.LoadScene("TitleScene");
     }
 }

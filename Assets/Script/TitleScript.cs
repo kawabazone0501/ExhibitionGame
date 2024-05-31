@@ -5,34 +5,31 @@ using UnityEngine.UI;
 
 public class TitleScript : MonoBehaviour
 {
-    public AudioSource audioSource;
+    [SerializeField] private GameConstants gameConstants;
+
+    
 
     Animator fade_animator;
-    public GameObject fadeObj;
+    [SerializeField] private GameObject fadeObj;
 
-    public Button onButton;
+    [SerializeField] private Button onButton;
     //public Button[] onButtons;
 
-    public Button offButton;
+    [SerializeField] private Button offButton;
     //public Button[] offButtons;
-    public Image panel;
+    [SerializeField] private Image panel;
 
-    private int CallBack;
-
+   
     private void Awake()
     {
         fade_animator = fadeObj.GetComponent<Animator>();
-        // AudioSourceコンポーネントを取得
-        audioSource = GetComponent<AudioSource>();
+       
     }
     // Start is called before the first frame update
     void Start()
     {
        
         fade_animator.SetBool("isFadeOut", true);
-        audioSource.loop = true;
-        // オーディオを再生する
-        audioSource.Play();
     }
 
     // Update is called once per frame
@@ -44,7 +41,7 @@ public class TitleScript : MonoBehaviour
     public void SelectButton()
     {
         fade_animator.SetBool("isFadeIn", true);
-        Invoke("SelectScene",3.0f);
+        Invoke("SelectScene",gameConstants.FadeWaitTime);
     }
 
     public void SelectScene()

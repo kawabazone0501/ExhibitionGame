@@ -9,6 +9,12 @@ public class GameStateManager : MonoBehaviour
     [SerializeField]
     private GameConstants gameConstants;
 
+
+    private void Awake()
+    {
+        
+    }
+
     public static GameStateManager Instance
     {
         get
@@ -24,7 +30,6 @@ public class GameStateManager : MonoBehaviour
             return instance;
         }
     }
-
 
     public bool IsButtonClicked
     {
@@ -78,15 +83,7 @@ public class GameStateManager : MonoBehaviour
 
     public bool[] IsStudents => gameConstants.IsStudents;
 
-    public bool IsStudent
-    {
-        get => gameConstants.IsStudent;
-        set
-        {
-            Debug.Log($"IsStudent changed from {gameConstants.IsStudent} to {value}");
-            gameConstants.IsStudent = value;
-        }
-    }
+    
 
     public bool IsStudentLock
     {
@@ -126,5 +123,11 @@ public class GameStateManager : MonoBehaviour
             IsStudents[i] = false;
             Debug.Log($"IsStudents[{i}] set to false");
         }
+        IsStudentLock = false;
+        IsObjectAllowed = false;
+        IsClear = false;
+        IsButtonPressed = false;
+        IsButton1Enabled = false;
+        IsButton2Enabled = false;
     }
 }

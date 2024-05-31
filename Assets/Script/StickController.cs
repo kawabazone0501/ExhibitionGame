@@ -12,16 +12,17 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     private GameConstants gameConstants;
     [SerializeField]
     private GameStateManager gameStateManager;
+    [SerializeField]
+    private GameManager gameManager;
 
-   private RectTransform stickTransform; // スティックのRectTransform
+    private RectTransform stickTransform; // スティックのRectTransform
     private RectTransform backgroundTransform; // スティックの背景のRectTransform
 
     private Vector2 stickStartPosition; // スティックの初期位置
     private Vector2 stickDirection; // スティックの方向
     private float totalRotation = 0f; // スティックの総回転量
+    public float TotalRotation => totalRotation;
     private Vector2 prevStickDirection; // 前のフレームのスティックの方向
-
-   
 
     // 初期位置を記録するための変数
     private Vector2 initialPosition;
@@ -29,46 +30,13 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     // UI画像のRectTransform
     public RectTransform imageRectTransform;
 
-    [SerializeField]
-    private Image[] purpleGaugeImages; // ゲージとボタンのImages
-    // プロパティを使ってアクセスを提供
-    public Image[] PurpleGaugeImages => purpleGaugeImages;
+  
 
-    //画像を非表示にする+ゲージが満タンになると再び呼ばれるので総回転量をリセットする処理も入れる
-    public void HideImages()
-    {
-        totalRotation = 0.0f;// 総回転量をリセットする
-        foreach (var image in purpleGaugeImages)
-        {
-            if (image != null)
-            {
-                image.fillAmount = 0.0f;
-                image.enabled = false;
-            }
-           
-        }
-    }
-
-    public void ShowImages()
-    {
-        foreach(var image in purpleGaugeImages)
-        {
-            if(image != null)
-            {
-                image.enabled = true;
-            }
-        }
-    }
+    
+    
     void Awake()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("GameManager instance is null in Start.");
-        }
-        else
-        {
-            Debug.Log("GameManager instance is found in Start.");
-        }
+       
         AnimatorController animatorController = FindAnyObjectByType<AnimatorController>();
         if (animatorController != null)
         {
@@ -149,22 +117,25 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
 
     private void IncreaseGauge()
     {
-        if (purpleGaugeImages[1].fillAmount < 1.0f)
+        if (gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount < 1.0f)
         {
             // ゲージの値を増加させる
-            purpleGaugeImages[1].fillAmount += gameConstants.PurpleIncreaseAmount;
+            Debug.Log("zouka");
+            gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount += gameConstants.PurpleIncreaseAmount;
         }
-        else if (purpleGaugeImages[1].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        else if (gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
-            gameStateManager.IsStudent = false;
+            Debug.Log("syuuryou");
             Teacher.SetBool("vsPurple", false);
             ResetToInitialPosition();
+            gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
             GameManager.Instance.GetGaugeController().OnGaugeFull_purple();
+            totalRotation = 0f;
         }
 
 
         // ゲージの値を0から1の範囲にクランプする
-        purpleGaugeImages[1].fillAmount = Mathf.Clamp01(purpleGaugeImages[1].fillAmount);
+        gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.StudentPURPLE].fillAmount);
     }
 
     // 座標を初期位置にリセットする関数

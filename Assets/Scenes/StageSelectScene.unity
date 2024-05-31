@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 269253477}
   - component: {fileID: 269253476}
   m_Layer: 5
-  m_Name: Purple_Profile
+  m_Name: PurpleProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -421,7 +421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50cccca567c867f4e88a923102f4352f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 313161523}
+  gameConstants: {fileID: 11400000, guid: 7dea826f97c0ce7489bde6d4f8d8370b, type: 2}
   FadeObj: {fileID: 1842604916}
   highScoreTexts:
   - {fileID: 1408137559}
@@ -433,11 +433,8 @@ MonoBehaviour:
   - {fileID: 1695783673}
   - {fileID: 1102781140}
   - {fileID: 2006381628}
-  MaxSpawn: 0
-  Score_first: 0
-  Score_second: 0
-  Score_third: 0
-  MaxScores: 000000000000000000000000
+  season: 000000000000000000000000
+  maxScores: 000000000000000000000000
 --- !u!4 &313161522
 Transform:
   m_ObjectHideFlags: 0
@@ -467,7 +464,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -562,7 +559,7 @@ GameObject:
   - component: {fileID: 384081723}
   - component: {fileID: 384081722}
   m_Layer: 5
-  m_Name: CloseButton_Red
+  m_Name: RedCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,7 +630,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Close_profile
+        m_MethodName: CloseProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -693,7 +690,7 @@ GameObject:
   - component: {fileID: 581122823}
   - component: {fileID: 581122822}
   m_Layer: 5
-  m_Name: Red_Profile
+  m_Name: RedProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -994,7 +991,7 @@ GameObject:
   - component: {fileID: 1001310310}
   - component: {fileID: 1001310309}
   m_Layer: 5
-  m_Name: Kobayashi_Profile
+  m_Name: TeacherProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1280,7 +1277,7 @@ GameObject:
   - component: {fileID: 1102781141}
   - component: {fileID: 1102781140}
   m_Layer: 5
-  m_Name: CloseButton_White
+  m_Name: WhiteCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1351,7 +1348,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Close_profile
+        m_MethodName: CloseProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1684,7 +1681,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Red_Call
+        m_MethodName: RedCall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1745,7 +1742,7 @@ GameObject:
   - component: {fileID: 1306278042}
   - component: {fileID: 1306278041}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1922,7 +1919,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Kobayashi_Call
+        m_MethodName: TeacherCall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2062,7 +2059,7 @@ GameObject:
   - component: {fileID: 1695783674}
   - component: {fileID: 1695783673}
   m_Layer: 5
-  m_Name: CloseButton_Purple
+  m_Name: PurpleCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2133,7 +2130,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Close_profile
+        m_MethodName: CloseProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2362,7 +2359,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Purple_Call
+        m_MethodName: PurpleCall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2494,7 +2491,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: White_Call
+        m_MethodName: WhiteCall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2694,7 +2691,7 @@ GameObject:
   - component: {fileID: 1972599903}
   - component: {fileID: 1972599902}
   m_Layer: 5
-  m_Name: White_Profile
+  m_Name: WhiteProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2771,7 +2768,7 @@ GameObject:
   - component: {fileID: 2006381629}
   - component: {fileID: 2006381628}
   m_Layer: 5
-  m_Name: CloseButton_Kobayashi
+  m_Name: TeacherCloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2842,7 +2839,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 313161521}
         m_TargetAssemblyTypeName: SelectStageController, Assembly-CSharp
-        m_MethodName: Close_profile
+        m_MethodName: CloseProfile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

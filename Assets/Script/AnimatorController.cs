@@ -27,6 +27,7 @@ public class AnimatorController : MonoBehaviour
     // Awakeメソッドはオブジェクトが有効になるとすぐに呼び出される
     private void Awake()
     {
+        
         // もしどれかのアニメーターが設定されていなければエラーメッセージを表示
         if (seitoRed == null || seitoPurple == null || seitoWhite == null || teacher == null || phone == null)
         {

@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 361159180}
   - component: {fileID: 361159179}
   m_Layer: 5
-  m_Name: Image
+  m_Name: TitleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,12 +303,12 @@ GameObject:
   - component: {fileID: 687689818}
   - component: {fileID: 687689820}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: FadePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &687689817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c91c4a24737e7b9469b3de65c56fb723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 1238662585}
+  gameConstants: {fileID: 11400000, guid: 7dea826f97c0ce7489bde6d4f8d8370b, type: 2}
   fadeObj: {fileID: 687689816}
   onButton: {fileID: 1791203830}
   offButton: {fileID: 1580304288}
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 1308469363}
   - component: {fileID: 1308469362}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: BackPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -688,7 +688,7 @@ GameObject:
   - component: {fileID: 1466785243}
   - component: {fileID: 1466785242}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CreditImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -764,7 +764,7 @@ GameObject:
   - component: {fileID: 1496284636}
   - component: {fileID: 1496284635}
   m_Layer: 5
-  m_Name: Button
+  m_Name: GameStartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -896,7 +896,7 @@ GameObject:
   - component: {fileID: 1580304289}
   - component: {fileID: 1580304288}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CloseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1028,7 +1028,7 @@ GameObject:
   - component: {fileID: 1791203831}
   - component: {fileID: 1791203830}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CreditOpenButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1160,7 +1160,7 @@ GameObject:
   - component: {fileID: 2023433656}
   - component: {fileID: 2023433655}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1266,7 +1266,7 @@ GameObject:
   - component: {fileID: 2126999073}
   - component: {fileID: 2126999072}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: CreditPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

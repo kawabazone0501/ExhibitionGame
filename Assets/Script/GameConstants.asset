@@ -12,10 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62bc3d22aaf41d441adc049c34a48600, type: 3}
   m_Name: GameConstants
   m_EditorClassIdentifier: 
-  redGaugeFillAmountThreshold: 0.96
+  gaugeFillAmountThreshold: 0.96
+  gaugeFillAmountThresholdFull: 1
+  gaugeFillAmountThresholdReset: 0
   bonusThresholdTime: 120
   baseScore: 18000
   redArrivalScoreMultiplier: 700
   purpleArrivalScoreMultiplier: 600
-  grayArrivalScoreMultiplier: 500
+  whiteArrivalScoreMultiplier: 500
   bonusBaseScore: 30000
+  totalTime: 180
+  increaseAmount: 0.025
+  decreaseRateDecreaseAmount: 0.01
+  redIncreaseAmount: 0.05
+  redCardFillAmountIncrement: 0.1
+  maxStickDistance: 75
+  rotationThreshold: 360
+  purpleIncreaseAmount: 0.1
+  animationClips:
+  - {fileID: 7400000, guid: ee656c53c59d015419c4082f20b32c6e, type: 2}
+  - {fileID: 7400000, guid: 93c3b2ec80574fe4a85010866d7505ff, type: 2}
+  - {fileID: 7400000, guid: 41836fc27baf41f4f84c0d841ce55b94, type: 2}

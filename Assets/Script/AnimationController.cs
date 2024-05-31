@@ -9,6 +9,8 @@ public class AnimationController : MonoBehaviour
     private GameStateManager gameStateManager;
     [SerializeField]
     private GameConstants gameConstants;
+    [SerializeField]
+    private GameManager gameManager;
 
     private Animator SeitoRed;
     private Animator SeitoPurple;
@@ -16,87 +18,46 @@ public class AnimationController : MonoBehaviour
     private Animator Teacher;
     private Animator Phone;
 
-
-    // 定数の定義
-    private const int OBJECT_A = 0;
-    private const int OBJECT_B = 1;
-    private const int OBJECT_C = 2;
-    private const int OBJECT_D = 3;
-    private const int OBJECT_E = 4;
-    private const int OBJECT_F = 5;
-
-    // 再生するアニメーションクリップ
-    [SerializeField]
-    private AnimationClip[] animationClips;
-
-    // アニメーションが再生されなかった場合の待機時間
-    [SerializeField]
-    private float waitTimeIfNotPlayed = 1.0f;
-
-    [SerializeField]
-    private Image[] gaugeImages;
-
-    public Image[] GaugeImages => gaugeImages;
-    [SerializeField]
-    private Image[] roomImages;
-
+    
     public IEnumerator redColoutine;
     public IEnumerator purpleColoutine;
     public IEnumerator whiteColoutine;
 
-   
-
     public int red_arrival = 0;
     public int purple_arrival = 0;
     public int white_arrival = 0;
-
     // 出現したオブジェクトの数
     private int objectsSpawned = 0;
-
     // 出現する最大数
     private int maxObjectsToSpawn;
-
     public int MaxObjectsSpawn => maxObjectsToSpawn;
 
-
-   
     private void Awake()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("GameManager instance is null in Start.");
-        }
-        else
-        {
-            Debug.Log("GameManager instance is found in Start.");
-        }
-        gameStateManager = GameStateManager.Instance;
-        
-        GameManager.Instance.HideAllImages();
 
         // PlayerPrefsから設定値を取得
         maxObjectsToSpawn = PlayerPrefs.GetInt("isMax");
 
         // 条件に応じたオブジェクトの非表示処理
-        if (maxObjectsToSpawn == 1)
+        if (maxObjectsToSpawn == gameConstants.FirstSeason)
         {
-            for (int i = OBJECT_C; i <= OBJECT_F; i++)
+            for (int i = gameConstants.OBJECT_C; i <= gameConstants.OBJECT_F; i++)
             {
-                roomImages[i].gameObject.SetActive(false);
+                gameManager.RoomImages[i].gameObject.SetActive(false);
             }
         }
-        else if (maxObjectsToSpawn == 2)
+        else if (maxObjectsToSpawn == gameConstants.SecondSeason)
         {
-            roomImages[OBJECT_A].gameObject.SetActive(false);
-            roomImages[OBJECT_B].gameObject.SetActive(false);
-            roomImages[OBJECT_E].gameObject.SetActive(false);
-            roomImages[OBJECT_F].gameObject.SetActive(false);
+            gameManager.RoomImages[gameConstants.OBJECT_A].gameObject.SetActive(false);
+            gameManager.RoomImages[gameConstants.OBJECT_B].gameObject.SetActive(false);
+            gameManager.RoomImages[gameConstants.OBJECT_E].gameObject.SetActive(false);
+            gameManager.RoomImages[gameConstants.OBJECT_F].gameObject.SetActive(false);
         }
-        else if (maxObjectsToSpawn == 3)
+        else if (maxObjectsToSpawn == gameConstants.ThirdSeason)
         {
-            for (int i = OBJECT_A; i <= OBJECT_D; i++)
+            for (int i = gameConstants.OBJECT_A; i <= gameConstants.OBJECT_D; i++)
             {
-                roomImages[i].gameObject.SetActive(false);
+                gameManager.RoomImages[i].gameObject.SetActive(false);
             }
         }
 
@@ -117,6 +78,8 @@ public class AnimationController : MonoBehaviour
         purpleColoutine = purpleAnimation();
         whiteColoutine = whiteAnimation();
         GameStateManager.Instance.SetAllStudentsFalse();
+        Debug.Log(gameConstants.IsObjectAllowed);
+        Debug.Log(gameStateManager.IsStudentLock);
     }
 
     // Start is called before the first frame update
@@ -129,55 +92,40 @@ public class AnimationController : MonoBehaviour
         
     }
 
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void HideImages()
-    {
-        foreach(var image in gaugeImages)
-        {
-            if (image != null)
-            {
-                image.enabled = false;
-            }
-        }
-    }
-
     public IEnumerator redAnimation()
     {
         while (true)
         {
 
-            if (!gameStateManager.IsStudents[gameConstants.Student_RED] && gameStateManager.IsClear)
+            if (!gameStateManager.IsStudents[gameConstants.StudentRED] && gameStateManager.IsClear)
             {
-                gameStateManager.IsStudents[gameConstants.Student_RED] = true;
-                Debug.Log("Stop_red");
-                gameStateManager.IsClear = true;
-                StopCoroutine(redColoutine);
+               
+                StopAnimation
+                    (
+                       ref purpleColoutine,
+                       ref gameStateManager.IsStudents[gameConstants.StudentPURPLE]
+                    );
             }
-            //指定した確率でアニメーションを再生
-            else if (Random.Range(0.0f, 1.0f) <= 0.3f && !gameStateManager.IsStudents[gameConstants.Student_RED] && objectsSpawned < maxObjectsToSpawn && !gameConstants.IsObjectAllowed)
+            
+            else if(ShouldPlayAnimation(gameConstants.StudentRED))
             {
-                red_arrival++;
-                objectsSpawned++;
-                if (objectsSpawned >= maxObjectsToSpawn)
-                {
-                    gameConstants.IsObjectAllowed = true;
-                }
-                if (!gameStateManager.IsStudent)
-                {
-                    gameStateManager.IsStudent = true;
-                }
-                gameStateManager.IsStudents[gameConstants.Student_RED] = true;
-                Debug.Log("enter_red");
-                SeitoRed.SetBool("isRed", true);
-                yield return new WaitForSeconds(animationClips[0].length + 0.5f);
-                GameManager.Instance.GetGaugeController().ShowImagesInRange(1, 3);
+                gameStateManager.IsStudentLock = true;//Lock;
+                PlayAnimation
+                    (
+                       ref red_arrival,
+                       ref gameStateManager.IsStudents[gameConstants.StudentRED],
+                        SeitoRed,
+                       "isRed",
+                       gameConstants.AnimationClips[gameConstants.StudentRED].length + gameConstants.WaitAnimationTime
+                    );
+                gameConstants   .IsStudentLock = false;
+                gameManager.InvokeAction
+                     (
+                         gameManager.RedShow,
+                         gameConstants.StartDisplayImageRed,
+                         gameConstants.EndDisplayImageRed,
+                         gameConstants.AnimationClips[gameConstants.StudentRED].length + gameConstants.WaitAnimationTime
+                      );
                 if (redColoutine != null) // Coroutineが実行中であれば停止
                 {
                     Debug.Log("stop_red");
@@ -187,7 +135,7 @@ public class AnimationController : MonoBehaviour
             else
             {
                 Debug.Log("no_red");
-                yield return new WaitForSeconds(waitTimeIfNotPlayed);
+                yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
         }
     }
@@ -196,57 +144,47 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
-            /* if (!gameStateManager.IsStudents[gameConstants.Student_PURPLE] && gameStateManager.IsClear)
-             {
-                 gameStateManager.IsStudents[gameConstants.Student_PURPLE] = true;
-                 Debug.Log("Stop_purple");
-                 gameStateManager.IsClear = true;
-                 StopCoroutine(purpleColoutine);
-             }*/
-            if (!gameStateManager.IsStudents[gameConstants.Student_PURPLE] && gameStateManager.IsClear)
+           
+            if (!gameStateManager.IsStudents[gameConstants.StudentPURPLE] && gameStateManager.IsClear)
             {
-                StopAnimation(ref whiteColoutine, ref gameStateManager.IsStudents[gameConstants.Student_PURPLE]);
+                StopAnimation
+                    (
+                        ref purpleColoutine,
+                        ref gameStateManager.IsStudents[gameConstants.StudentPURPLE]
+                    );
             }
             //指定した確率でアニメーションを再生
-                    /*else if (Random.Range(0.0f, 1.0f) <= 0.3f && !gameStateManager.IsStudents[gameConstants.Student_PURPLE] && objectsSpawned < maxObjectsToSpawn && !isObjectAllowed)
-                    {
-                        purple_arrival++;
-                        objectsSpawned++;
-                        if (objectsSpawned >= maxObjectsToSpawn)
-                        {
-                            isObjectAllowed = true;
-                        }
-                        if (!gameStateManager.IsStudent)
-                        {
-                           gameStateManager.IsStudent = true;
-                        }
-                        gameStateManager.IsStudents[gameConstants.Student_PURPLE] = true;    
-                        Debug.Log("enter_purple");
-                        SeitoPurple.SetBool("isPurple",true);
-                        yield return new WaitForSeconds(animationClips[gameConstants.Student_PURPLE].length + 0.25f);
-                        GameManager.Instance.GetStickController().ShowImages();
-                        if(purpleColoutine != null)
-                        {
-                            StopCoroutine(purpleColoutine);
-                        }
-                    }*/
-            else if (ShouldPlayAnimation(gameConstants.Student_PURPLE))
+           
+            else if (ShouldPlayAnimation(gameConstants.StudentPURPLE))
             {
                 gameStateManager.IsStudentLock = true; // Lock
                 PlayAnimation
                   (
                      ref purple_arrival,
-                     ref gameStateManager.IsStudents[gameConstants.Student_PURPLE],
+                     ref gameStateManager.IsStudents[gameConstants.StudentPURPLE],
                      SeitoPurple,
                      "isPurple",
-                     animationClips[gameConstants.Student_PURPLE].length + 0.5f
+                     gameConstants.AnimationClips[gameConstants.StudentPURPLE].length + 0.5f
                    );
                 gameStateManager.IsStudentLock = false;
+                gameManager.InvokeAction
+                    (
+                        gameManager.PurpleShow,
+                        gameConstants.StartDisplayImagePurple,
+                        gameConstants.EndDisplayImagePurple,
+                        gameConstants.AnimationClips[gameConstants.StudentPURPLE].length
+                        + gameConstants.WaitAnimationTime
+                     );
+                if (purpleColoutine != null) // Coroutineが実行中であれば停止
+                {
+                    Debug.Log("stop_purple");
+                    StopCoroutine(purpleColoutine);
+                }
             }
             else
             {
                 Debug.Log("no_purple");
-                yield return new WaitForSeconds(waitTimeIfNotPlayed);
+                yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
         }
     }
@@ -255,58 +193,41 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
-            if (!gameStateManager.IsStudents[gameConstants.Student_WHITE] && gameStateManager.IsClear)
+            if (!gameStateManager.IsStudents[gameConstants.StudentWHITE] && gameStateManager.IsClear)
             {
-                /*isWhite = true;
-                Debug.Log("Stop_gray");
-                GameManager.Instance.GetGaugeController().isClear = true;
-                StopCoroutine(whiteColoutine);*/
-                StopAnimation(ref whiteColoutine, ref gameStateManager.IsStudents[gameConstants.Student_WHITE]);
+               
+                StopAnimation(ref whiteColoutine, ref gameStateManager.IsStudents[gameConstants.StudentWHITE]);
             }
             //指定した確率でアニメーションを再生
-            /*else if (Random.Range(0.0f, 1.0f) <= 0.3f && !isWhite && objectsSpawned < maxObjectsToSpawn && !isObjectAllowed)
-            {
-                gray_arrival++;
-                objectsSpawned++;
-                if (objectsSpawned >= maxObjectsToSpawn)
-                {
-                    isObjectAllowed = true;
-                }
-                if (!GameManager.Instance.GetGaugeController().isStudent)
-                {
-                    GameManager.Instance.GetGaugeController().isStudent = true;
-                }
-                isWhite = true;
-                Debug.Log("enter_gray");
-                SeitoWhite.SetBool("isWhite", true);
-                Phone.SetBool("isCall", true);
-                yield return new WaitForSeconds(animationClips[2].length + 0.5f);
-                GameManager.Instance.GetLongPressButton().ShowImages();
-                if (whiteColoutine != null)
-                {
-                    Debug.Log("stop_gray");
-                    StopCoroutine(whiteColoutine);
-                }
-            }*/
-            else if (ShouldPlayAnimation( gameConstants.Student_WHITE))
+            
+            else if (ShouldPlayAnimation( gameConstants.StudentWHITE))
             {
                 gameStateManager.IsStudentLock = true; // Lock
                 PlayAnimation
                   (
                      ref white_arrival, 
-                     ref gameStateManager.IsStudents[gameConstants.Student_WHITE], 
+                     ref gameStateManager.IsStudents[gameConstants.StudentWHITE], 
                      SeitoWhite,
                      "isWhite",
-                     animationClips[gameConstants.Student_WHITE].length + 0.5f
+                     gameConstants.AnimationClips[gameConstants.StudentWHITE].length + gameConstants.WaitAnimationTime
                    );
                 
                 Phone.SetBool("isCall", true);
                 gameStateManager.IsStudentLock = false;
+                gameManager.InvokeAction
+                    (
+                        gameManager.WhiteShow,
+                        gameConstants.StartDisplayImageWhite,
+                        gameConstants.EndDisplayImageWhite,
+                        gameConstants.AnimationClips[gameConstants.StudentWHITE].length
+                        + gameConstants.WaitAnimationTime
+                     );
+                break;
             }
             else
             {
                 Debug.Log("no_gray");
-                yield return new WaitForSeconds(waitTimeIfNotPlayed);
+                yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
         }
     }
@@ -332,10 +253,9 @@ public class AnimationController : MonoBehaviour
            float waitTime
         )
     {
-        gameStateManager.IsStudent = true;
         arrival++;
         objectsSpawned++;
-        if(objectsSpawned>=maxObjectsToSpawn)
+        if (objectsSpawned >= maxObjectsToSpawn)
         {
             gameConstants.IsObjectAllowed = true;
         }
@@ -347,8 +267,7 @@ public class AnimationController : MonoBehaviour
     private IEnumerator AnimationCoroutine(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        GameManager.Instance.GetLongPressButton().ShowImages();
-        // StopCoroutine を使用せずに、現在のコルーチンを終了します。
+        // StopCoroutine を使用せずに、現在のコルーチンを終了する。
         yield break;
     }
     private void StopAnimation
@@ -369,10 +288,10 @@ public class AnimationController : MonoBehaviour
         SeitoRed.SetBool("isRed", false);
         SeitoPurple.SetBool("isPurple", false);
         SeitoWhite.SetBool("isWhite", false);
-        GameManager.Instance.GetGaugeController().RedGaugeImages[3].fillAmount = 0.0f;
-        GameManager.Instance.GetStickController().PurpleGaugeImages[1].fillAmount = 0.0f;
-        GameManager.Instance.GetLongPressButton().WhiteInGaugeImage.fillAmount = 0.0f;
-        GameManager.Instance.HideAllImages();
+        gameManager.GaugeImages[gameConstants.RedGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        GameManager.Instance.HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
     }
 
     public void Restart_Red()
