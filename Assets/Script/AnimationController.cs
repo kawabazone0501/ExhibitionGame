@@ -37,10 +37,14 @@ public class AnimationController : MonoBehaviour
 
         // PlayerPrefsから設定値を取得
         maxObjectsToSpawn = PlayerPrefs.GetInt("isMax");
-
+        Debug.Log(maxObjectsToSpawn);
         // 条件に応じたオブジェクトの非表示処理
         if (maxObjectsToSpawn == gameConstants.FirstSeason)
         {
+            Debug.Log("maxObjectsToSpawn=");
+            Debug.Log(maxObjectsToSpawn);
+            Debug.Log("gameConstants.FirstSeason=");
+            Debug.Log(gameConstants.FirstSeason);
             for (int i = gameConstants.OBJECT_C; i <= gameConstants.OBJECT_F; i++)
             {
                 gameManager.RoomImages[i].gameObject.SetActive(false);
@@ -48,6 +52,10 @@ public class AnimationController : MonoBehaviour
         }
         else if (maxObjectsToSpawn == gameConstants.SecondSeason)
         {
+            Debug.Log("maxObjectsToSpawn=");
+            Debug.Log(maxObjectsToSpawn);
+            Debug.Log("gameConstants.SecondSeason=");
+            Debug.Log(gameConstants.SecondSeason);
             gameManager.RoomImages[gameConstants.OBJECT_A].gameObject.SetActive(false);
             gameManager.RoomImages[gameConstants.OBJECT_B].gameObject.SetActive(false);
             gameManager.RoomImages[gameConstants.OBJECT_E].gameObject.SetActive(false);
@@ -55,6 +63,10 @@ public class AnimationController : MonoBehaviour
         }
         else if (maxObjectsToSpawn == gameConstants.ThirdSeason)
         {
+            Debug.Log("maxObjectsToSpawn=");
+            Debug.Log(maxObjectsToSpawn);
+            Debug.Log("gameConstants.ThirdSeason=");
+            Debug.Log(gameConstants.ThirdSeason);
             for (int i = gameConstants.OBJECT_A; i <= gameConstants.OBJECT_D; i++)
             {
                 gameManager.RoomImages[i].gameObject.SetActive(false);

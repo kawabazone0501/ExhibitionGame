@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.Tilemaps;
 
 public class SelectStageController : MonoBehaviour
 {
     [SerializeField] private GameConstants gameConstants;
+    [SerializeField] private GameManager gameManager;
 
     Animator Fade_animator;
     [SerializeField] private GameObject FadeObj;
@@ -46,22 +44,22 @@ public class SelectStageController : MonoBehaviour
     {
         animator = profileObj.GetComponent<Animator>();
 
-        if (Season[gameConstants.FirstScore] > MaxScores[gameConstants.FirstScore])
+        if (Season[gameConstants.FirstScore] > MaxScores[0])
         {
-            MaxScores[gameConstants.FirstScore] = Season[gameConstants.FirstScore];
-            PlayerPrefs.SetInt("HighScore_1", MaxScores[gameConstants.FirstScore]);
+            MaxScores[0] = Season[gameConstants.FirstScore];
+            PlayerPrefs.SetInt("HighScore_1", MaxScores[0]);
             PlayerPrefs.Save();
         }
-        if (Season[gameConstants.SecondScore] > MaxScores[gameConstants.SecondScore])
+        if (Season[gameConstants.SecondScore] > MaxScores[1])
         {
-            MaxScores[gameConstants.SecondScore] = Season[gameConstants.SecondScore];
-            PlayerPrefs.SetInt("HighScore_2", MaxScores[gameConstants.SecondScore]);
+            MaxScores[1] = Season[gameConstants.SecondScore];
+            PlayerPrefs.SetInt("HighScore_2", MaxScores[1]);
             PlayerPrefs.Save();
         }
-        if (Season[gameConstants.ThirdScore] > MaxScores[gameConstants.ThirdScore])
+        if (Season[gameConstants.ThirdScore] > MaxScores[2])
         {
-            MaxScores[gameConstants.ThirdScore] = Season[gameConstants.ThirdScore];
-            PlayerPrefs.SetInt("HighScore_3", MaxScores[gameConstants.ThirdScore]);
+            MaxScores[2] = Season[gameConstants.ThirdScore];
+            PlayerPrefs.SetInt("HighScore_3", MaxScores[2]);
             PlayerPrefs.Save();
         }
 
@@ -85,6 +83,7 @@ public class SelectStageController : MonoBehaviour
         Fade_animator.SetBool("isFadeIn", true);
         MaxSpawn = gameConstants.FirstScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
         Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
@@ -94,6 +93,7 @@ public class SelectStageController : MonoBehaviour
         Fade_animator.SetBool("isFadeIn", true);
         MaxSpawn = gameConstants.SecondScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
         Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
@@ -103,6 +103,7 @@ public class SelectStageController : MonoBehaviour
         Fade_animator.SetBool("isFadeIn", true);
         MaxSpawn = gameConstants.ThirdScore;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
         Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
