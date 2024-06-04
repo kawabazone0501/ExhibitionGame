@@ -195,7 +195,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 737}
+  m_AnchoredPosition: {x: 0, y: 696}
   m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &59651377
@@ -314,7 +314,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 00000
+  m_Text: '
+
+'
 --- !u!1 &269253474
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameConstants: {fileID: 11400000, guid: 7dea826f97c0ce7489bde6d4f8d8370b, type: 2}
+  gameManager: {fileID: 0}
   FadeObj: {fileID: 1842604916}
   highScoreTexts:
   - {fileID: 1408137559}
@@ -882,7 +885,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: 285}
+  m_AnchoredPosition: {x: 25, y: 350}
   m_SizeDelta: {x: 450, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &800772282
@@ -1167,7 +1170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168, y: -194}
+  m_AnchoredPosition: {x: -168, y: -118}
   m_SizeDelta: {x: 450, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1075302482
@@ -1500,7 +1503,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 174, y: -619}
+  m_AnchoredPosition: {x: 174, y: -526}
   m_SizeDelta: {x: 450, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1169126083
@@ -1610,7 +1613,7 @@ GameObject:
   - component: {fileID: 1290981097}
   - component: {fileID: 1290981096}
   m_Layer: 5
-  m_Name: B_Red
+  m_Name: RedButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1632,7 +1635,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -501, y: 28}
+  m_AnchoredPosition: {x: -501, y: 83}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1290981096
@@ -1848,7 +1851,7 @@ GameObject:
   - component: {fileID: 1345603624}
   - component: {fileID: 1345603623}
   m_Layer: 5
-  m_Name: B_Kobayashi
+  m_Name: TeacherButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1870,7 +1873,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 341, y: 485}
+  m_AnchoredPosition: {x: 341, y: 423}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1345603623
@@ -2045,7 +2048,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 00000
+  m_Text: '
+
+'
 --- !u!1 &1695783671
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,7 +2293,7 @@ GameObject:
   - component: {fileID: 1852805266}
   - component: {fileID: 1852805265}
   m_Layer: 5
-  m_Name: B_Purple
+  m_Name: PurpleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2310,7 +2315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 278, y: -217}
+  m_AnchoredPosition: {x: 278, y: -127}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1852805265
@@ -2420,7 +2425,7 @@ GameObject:
   - component: {fileID: 1861957223}
   - component: {fileID: 1861957222}
   m_Layer: 5
-  m_Name: B_White
+  m_Name: WhiteButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2442,7 +2447,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -230, y: -606}
+  m_AnchoredPosition: {x: -230, y: -510}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1861957222
@@ -2965,7 +2970,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '00000
+  m_Text: '
 
 '
 --- !u!1660057539 &9223372036854775807
