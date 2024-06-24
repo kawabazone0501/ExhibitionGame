@@ -1,13 +1,10 @@
-using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class LongPressButton : MonoBehaviour
 {
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private GameStateManager gameStateManager;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
 
     private Animator SeitoWhite;
     private Animator Teacher;
@@ -54,22 +51,23 @@ public class LongPressButton : MonoBehaviour
                 currentGaugeValue += gameConstants.GaugeIncreaseRate * Time.deltaTime;
                 UpdateGauge();
             }
-            else if (gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+            else if (uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
             {
                 Teacher.SetBool("vsWhite", false);
                 Phone.SetBool("isSupport", false);
                 gameStateManager.IsButtonPressed = false;
                 gameStateManager.IsStudents[gameConstants.StudentWHITE] = false;
+                Debug.Log(gameStateManager.IsStudents[gameConstants.StudentWHITE]);
                 currentGaugeValue = 0.0f;
-                gameManager.GetGaugeController().OnGaugeFullWhite();
+                uiManager.GetGaugeController().OnGaugeFullWhite();
             }
         }
     }
     // ゲージの更新
     private void UpdateGauge()
     {
-        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;
+        uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;
 
-        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount=Mathf.Clamp01(gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount=Mathf.Clamp01(uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount);
     }
 }

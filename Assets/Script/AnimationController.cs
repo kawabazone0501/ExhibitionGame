@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AnimationController : MonoBehaviour
 {
@@ -10,7 +8,7 @@ public class AnimationController : MonoBehaviour
     [SerializeField]
     private GameConstants gameConstants;
     [SerializeField]
-    private GameManager gameManager;
+    private UIManager uiManager;
 
     private Animator SeitoRed;
     private Animator SeitoPurple;
@@ -47,7 +45,7 @@ public class AnimationController : MonoBehaviour
             Debug.Log(gameConstants.FirstSeason);
             for (int i = gameConstants.OBJECT_C; i <= gameConstants.OBJECT_F; i++)
             {
-                gameManager.RoomImages[i].gameObject.SetActive(false);
+                uiManager.RoomImages[i].gameObject.SetActive(false);
             }
         }
         else if (maxObjectsToSpawn == gameConstants.SecondSeason)
@@ -56,10 +54,10 @@ public class AnimationController : MonoBehaviour
             Debug.Log(maxObjectsToSpawn);
             Debug.Log("gameConstants.SecondSeason=");
             Debug.Log(gameConstants.SecondSeason);
-            gameManager.RoomImages[gameConstants.OBJECT_A].gameObject.SetActive(false);
-            gameManager.RoomImages[gameConstants.OBJECT_B].gameObject.SetActive(false);
-            gameManager.RoomImages[gameConstants.OBJECT_E].gameObject.SetActive(false);
-            gameManager.RoomImages[gameConstants.OBJECT_F].gameObject.SetActive(false);
+            uiManager.RoomImages[gameConstants.OBJECT_A].gameObject.SetActive(false);
+            uiManager.RoomImages[gameConstants.OBJECT_B].gameObject.SetActive(false);
+            uiManager.RoomImages[gameConstants.OBJECT_E].gameObject.SetActive(false);
+            uiManager.RoomImages[gameConstants.OBJECT_F].gameObject.SetActive(false);
         }
         else if (maxObjectsToSpawn == gameConstants.ThirdSeason)
         {
@@ -69,7 +67,7 @@ public class AnimationController : MonoBehaviour
             Debug.Log(gameConstants.ThirdSeason);
             for (int i = gameConstants.OBJECT_A; i <= gameConstants.OBJECT_D; i++)
             {
-                gameManager.RoomImages[i].gameObject.SetActive(false);
+                uiManager.RoomImages[i].gameObject.SetActive(false);
             }
         }
 
@@ -131,9 +129,9 @@ public class AnimationController : MonoBehaviour
                        gameConstants.AnimationClips[gameConstants.StudentRED].length + gameConstants.WaitAnimationTime
                     );
                 gameConstants   .IsStudentLock = false;
-                gameManager.InvokeAction
+                uiManager.InvokeAction
                      (
-                         gameManager.RedShow,
+                         uiManager.RedShow,
                          gameConstants.StartDisplayImageRed,
                          gameConstants.EndDisplayImageRed,
                          gameConstants.AnimationClips[gameConstants.StudentRED].length + gameConstants.WaitAnimationTime
@@ -181,9 +179,9 @@ public class AnimationController : MonoBehaviour
                      gameConstants.AnimationClips[gameConstants.StudentPURPLE].length + 0.5f
                    );
                 gameStateManager.IsStudentLock = false;
-                gameManager.InvokeAction
+                uiManager.InvokeAction
                     (
-                        gameManager.PurpleShow,
+                        uiManager.PurpleShow,
                         gameConstants.StartDisplayImagePurple,
                         gameConstants.EndDisplayImagePurple,
                         gameConstants.AnimationClips[gameConstants.StudentPURPLE].length
@@ -216,7 +214,7 @@ public class AnimationController : MonoBehaviour
             }
             //指定した確率でアニメーションを再生
             
-            else if (ShouldPlayAnimation( gameConstants.StudentWHITE))
+            else if (ShouldPlayAnimation(gameConstants.StudentWHITE))
             {
                 gameStateManager.IsStudentLock = true; // Lock
                 PlayAnimation
@@ -230,9 +228,9 @@ public class AnimationController : MonoBehaviour
                 
                 Phone.SetBool("isCall", true);
                 gameStateManager.IsStudentLock = false;
-                gameManager.InvokeAction
+                uiManager.InvokeAction
                     (
-                        gameManager.WhiteShow,
+                        uiManager.WhiteShow,
                         gameConstants.StartDisplayImageWhite,
                         gameConstants.EndDisplayImageWhite,
                         gameConstants.AnimationClips[gameConstants.StudentWHITE].length
@@ -306,10 +304,10 @@ public class AnimationController : MonoBehaviour
         SeitoRed.SetBool("isRed", false);
         SeitoPurple.SetBool("isPurple", false);
         SeitoWhite.SetBool("isWhite", false);
-        gameManager.GaugeImages[gameConstants.RedGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
-        gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
-        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
-        GameManager.Instance.HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
+        uiManager.GaugeImages[gameConstants.RedGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        UIManager.Instance.HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
     }
 
     public void Restart_Red()

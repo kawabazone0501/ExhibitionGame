@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEditor;
 
 public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -13,7 +9,7 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     [SerializeField]
     private GameStateManager gameStateManager;
     [SerializeField]
-    private GameManager gameManager;
+    private UIManager uiManager;
 
     private RectTransform stickTransform; // スティックのRectTransform
     private RectTransform backgroundTransform; // スティックの背景のRectTransform
@@ -117,25 +113,23 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
 
     private void IncreaseGauge()
     {
-        if (gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount < 1.0f)
+        if (uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount < 1.0f)
         {
             // ゲージの値を増加させる
-            Debug.Log("zouka");
-            gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount += gameConstants.PurpleIncreaseAmount;
+            Debug.Log("増加");
+            uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount += gameConstants.PurpleIncreaseAmount;
         }
-        else if (gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        else if (uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
-            Debug.Log("syuuryou");
+            Debug.Log("終了");
             Teacher.SetBool("vsPurple", false);
             ResetToInitialPosition();
             gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
-            gameManager.GetGaugeController().OnGaugeFull_purple();
+            uiManager.GetGaugeController().OnGaugeFull_purple();
             totalRotation = 0f;
         }
-
-
         // ゲージの値を0から1の範囲にクランプする
-        gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PurpleGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount);
     }
 
     // 座標を初期位置にリセットする関数

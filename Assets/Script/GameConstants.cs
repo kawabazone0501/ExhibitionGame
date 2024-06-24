@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameConstants", menuName = "Constants/GameConstants")]
@@ -20,9 +14,9 @@ public class GameConstants : ScriptableObject
      */
     //------------------------------------------------------------------------------------------------
     // ゲーム関連の定数
-     private float gaugeFillAmountThreshold = 0.96f;        // ゲージが満タンになったかを確認するための定数
-     private float gaugeFillAmountThresholdFull = 1.0f;     // ゲージの量が満タンに達しているかを確認する定数(達してなければゲージを増やす)
-     private float gaugeFillAmountThresholdReset = 0.0f;    // ゲージ量をリセットする定数
+     private float gaugeFillAmountThreshold = 0.96f;                        // ゲージが満タンになったかを確認するための定数
+     private float gaugeFillAmountThresholdFull = 1.0f;                     // ゲージの量が満タンに達しているかを確認する定数(達してなければゲージを増やす)
+     private float gaugeFillAmountThresholdReset = 0.0f;                    // ゲージ量をリセットする定数
     [SerializeField] private int bonusThresholdTime = 120;                  // ボーナススコアを得られるタイムかを図るしきい値
     [SerializeField] private int baseScore = 18000;                         // ゲームクリア時の基礎スコア
     [SerializeField] private int redArrivalScoreMultiplier = 700;           // 赤の生徒を対応した際のスコア
@@ -32,17 +26,17 @@ public class GameConstants : ScriptableObject
     [SerializeField] private float totalTime = 180.0f;                      //制限時間　３分
     //------------------------------------------------------------------------------------------------
     // Player関連の定数
-    private float increaseAmount = 0.025f;                 // ゲージの増加量
-    private float decreaseRateDecreaseAmount = 0.01f;      // 毎秒の減少率を減らす量
+    private float increaseAmount = 0.025f;                                  // ゲージの増加量
+    private float decreaseRateDecreaseAmount = 0.01f;                       // 毎秒の減少率を減らす量
     //-------------------------------------------------------------------------------------------------
     // 赤の生徒関連の定数
-    private float redIncreaseAmount = 0.05f;               // ゲージの増加量
-    private float redCardFillAmountIncrement = 0.1f;       //レッドカードのゲージの増加量
+    private float redIncreaseAmount = 0.05f;                                // ゲージの増加量
+    private float redCardFillAmountIncrement = 0.1f;                        //レッドカードのゲージの増加量
     //-------------------------------------------------------------------------------------------------
     // 紫の生徒関連の定数
-    private float maxStickDistance = 75f;                  // スティックが動くことができる最大距離
-    private float rotationThreshold = 360f;                // 1周とみなす回転量の閾値
-    private float purpleIncreaseAmount = 0.1f;             // ゲージの増加量
+    private float maxStickDistance = 75f;                                   // スティックが動くことができる最大距離
+    private float rotationThreshold = 360f;                                 // 1周とみなす回転量の閾値
+    private float purpleIncreaseAmount = 0.1f;                              // ゲージの増加量
     //------------------------------------------------------------------------------------------------
     // 白の生徒関連の定数
     private float gaugeIncreaseRate = 0.5f;                                 // ゲージの増加速度
@@ -55,7 +49,7 @@ public class GameConstants : ScriptableObject
     private bool isButton2Enabled = false;                                  // ボタン2が有効かどうか
     // 白の生徒のボタン
     private bool isButtonPressed = false;                                   // ボタンが押されているかどうかを示すフラグ
-    // レッドカード
+    // レッドカード 
     private bool isRedCard = false;                                         // レッドカードが押せるかどうかを判断するフラグ
     //--------------------------------------------------------------------------------------------------
     // 生徒の出現、退場に関連する bool値とゲームクリアの bool値
@@ -102,9 +96,9 @@ public class GameConstants : ScriptableObject
     //--------------------------------------------------------------------------------------------------
 
     // 難易度ごとの背景のオブジェクトの切り替えを行うための比較のための定数
-    private const int firstSeason = 1;
-    private const int secondSeason = 2;
-    private const int thirdSeason = 3;
+    private const int firstSeason = 0;
+    private const int secondSeason = 1;
+    private const int thirdSeason = 2;
     //--------------------------------------------------------------------------------------------------
     // 再生するアニメーションクリップ
     [SerializeField] private AnimationClip[] animationClips;
@@ -116,7 +110,7 @@ public class GameConstants : ScriptableObject
     private const float fadeWaitTime = 3.0f;
     private const float buttonDisplayWaitingTime = 2.0f;
     private const float exitWaitingTime = 5.0f;
-    private const float waitTimeIfNotPlayed = 1.0f;
+    private const float waitTimeIfNotPlayed = 5.0f;
     //---------------------------------------------------------------------------------------------------
     // ボタンやゲージの配列でFillAmountの値を変更するゲージや値を変動させるボタンを指定する定数
     private const int playerGauge = 0;
@@ -132,13 +126,10 @@ public class GameConstants : ScriptableObject
     // 赤の生徒のボタンの矢印のImageの切り替えのための定数
     private const int redButtonLeftArrow = 1;
     private const int redButtonRightArrow = 2;
-
+    private const int greenGauge = 5;
     //---------------------------------------------------------------------------------------------------
 
-    private const int firstScore = 0;
-    private const int secondScore = 1;
-    private const int thirdScore = 2;
-      
+    
     // プロパティを参照して読み込む
     public float GaugeFillAmountThreshold => gaugeFillAmountThreshold;
     public float GaugeFillAmountThresholdFull => gaugeFillAmountThresholdFull;
@@ -216,10 +207,6 @@ public class GameConstants : ScriptableObject
     public int RedButtonLeftArrow=> redButtonLeftArrow;
     public int RedButtonRightArrow => redButtonRightArrow;
     //---------------------------------------------------------------------------------------------------
-    public int FirstScore => firstScore;
-    public int SecondScore => secondScore;
-    public int ThirdScore => thirdScore;
-
     public bool IsButtonClicked
     {
         get => isButtonClicked;

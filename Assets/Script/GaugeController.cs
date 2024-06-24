@@ -16,7 +16,7 @@ public class GaugeController : MonoBehaviour
 
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private GameStateManager gameStateManager;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
 
     private int Bonus = 0;
     private int score = 0;
@@ -44,7 +44,7 @@ public class GaugeController : MonoBehaviour
         {
             DecreaseGauge();
         }
-        else if (gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount > gameConstants.GaugeFillAmountThresholdReset && !gameStateManager.IsClear)
+        else if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount > gameConstants.GaugeFillAmountThresholdReset && !gameStateManager.IsClear)
         {
             DecreaseGauge();
         }
@@ -54,22 +54,22 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("red");
         // FillAmountが1.0未満の場合のみFillAmountを増やす
-        if (gameManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+        if (uiManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
         {
             Debug.Log("card");
             // FillAmountを増やす
-            gameManager.GaugeImages[gameConstants.RedCard].fillAmount += gameConstants.RedCardFillAmountIncrement;
+            uiManager.GaugeImages[gameConstants.RedCard].fillAmount += gameConstants.RedCardFillAmountIncrement;
 
             // FillAmountが1.0未満の場合、ボタンを無効化する
-            if (gameManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+            if (uiManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
             {
-                gameManager.Buttons[gameConstants.RedCardButton].interactable = false;
+                uiManager.Buttons[gameConstants.RedCardButton].interactable = false;
             }
         }
         // FillAmountが1.0に達したらボタンを無効化する
         else
         {
-            gameManager.Buttons[gameConstants.RedCardButton].interactable = true;
+            uiManager.Buttons[gameConstants.RedCardButton].interactable = true;
         }
     }
 
@@ -99,9 +99,9 @@ public class GaugeController : MonoBehaviour
         }
 
         score = Bonus + gameConstants.BaseScore + 
-            gameManager.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
-            gameManager.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
-            gameManager.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
+            uiManager.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
+            uiManager.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
+            uiManager.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
 
         Debug.Log("Score");
         Invoke("UpdateCounterText", 1.5f);
@@ -109,9 +109,9 @@ public class GaugeController : MonoBehaviour
 
     void UpdateCounterText()
     {
-        if (gameManager.CounterText != null)
+        if (uiManager.CounterText != null)
         {
-            gameManager.CounterText.text = "スコア : " + Score.ToString("N0");
+            uiManager.CounterText.text = "スコア : " + Score.ToString("N0");
         }
         else
         {
@@ -129,10 +129,10 @@ public class GaugeController : MonoBehaviour
     // ボタン1がクリックされた時の処理
     public void OnRedButton1Clicked()
     {
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             IncreaseGauge_W();
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
         }
         else if (!gameStateManager.IsButton2Enabled) // ボタン2が押されていない場合のみボタン1を処理する
         {
@@ -141,10 +141,10 @@ public class GaugeController : MonoBehaviour
             IncreaseGauge_W();
             gameStateManager.IsButton1Enabled = false;
             gameStateManager.IsButton2Enabled = true;
-            gameManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = true;
-            gameManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = false;
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = true;
+            uiManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = true;
+            uiManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = true;
         }
     }
 
@@ -152,10 +152,10 @@ public class GaugeController : MonoBehaviour
     public void OnRedButton2Clicked()
     {
         Debug.Log("2");
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             IncreaseGauge_W();
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = false;
         }
         else if (!gameStateManager.IsButton1Enabled) // ボタン1が押されていない場合のみボタン2を処理する
         {
@@ -164,10 +164,10 @@ public class GaugeController : MonoBehaviour
             IncreaseGauge_W();
             gameStateManager.IsButton1Enabled = true;
             gameStateManager.IsButton2Enabled = false;
-            gameManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = false;
-            gameManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = true; ;
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = true;
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = false;
+            uiManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = false;
+            uiManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = true; ;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = true;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = false;
         }
     }
 
@@ -175,25 +175,25 @@ public class GaugeController : MonoBehaviour
     void IncreaseGauge()
     {
         // ゲージの値を増加させる
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += gameConstants.IncreaseAmount;
-        if (gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount >= gameConstants.GaugeFillAmountThresholdFull && !gameStateManager.IsClear)
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += gameConstants.IncreaseAmount;
+        if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount >= gameConstants.GaugeFillAmountThresholdFull && !gameStateManager.IsClear)
         {
             gameStateManager.IsClear = true;
             GameClearPanel.SetBool("isClear", true);
             Invoke("ClearScore", 1.5f);
         }
         // ゲージの値を0から1の範囲にクランプする
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
     }
 
     void IncreaseGauge_W()
     {
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
         {
             // ゲージの値を増加させる
-            gameManager.GaugeImages[gameConstants.RedGauge].fillAmount += gameConstants.RedIncreaseAmount;
+            uiManager.GaugeImages[gameConstants.RedGauge].fillAmount += gameConstants.RedIncreaseAmount;
         }
-        else if(gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        else if(uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             gameStateManager.IsButton1Enabled = false;
             gameStateManager.IsButton2Enabled = false;
@@ -201,7 +201,7 @@ public class GaugeController : MonoBehaviour
             OnGaugeFull_red();
         }
         // ゲージの値を0から1の範囲にクランプする
-        gameManager.GaugeImages[gameConstants.RedGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.RedGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.RedGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.RedGauge].fillAmount);
     }
 
     // ゲージを減少させる関数
@@ -209,15 +209,21 @@ public class GaugeController : MonoBehaviour
     {
         // ゲージの値を毎秒の減少率に応じて減少させる
         //gaugeImage.fillAmount -= currentDecreaseRate * Time.deltaTime;
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= gameConstants.DecreaseRateDecreaseAmount * Time.deltaTime;
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= gameConstants.DecreaseRateDecreaseAmount * Time.deltaTime;
 
         // ゲージの値を0から1の範囲にクランプする
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
     }
 
     public void RedCard()
     {
-        gameManager.GaugeImages[gameConstants.RedCard].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.GaugeImages[gameConstants.RedCard].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        uiManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
+        gameStateManager.IsStudents[gameConstants.StudentRED] = false;
+        gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
+        gameStateManager.IsStudents[gameConstants.StudentWHITE] = false;
         SeitoRed.SetBool("isRedCard", true);
         SeitoPurple.SetBool("isRedCard", true);
         SeitoWhite.SetBool("isRedCard", true);
@@ -226,6 +232,12 @@ public class GaugeController : MonoBehaviour
 
     public void ResetAnimation()
     {
+        gameStateManager.IsStudents[gameConstants.StudentRED] = true;
+        gameStateManager.IsStudents[gameConstants.StudentPURPLE] = true;
+        gameStateManager.IsStudents[gameConstants.StudentWHITE] = true;
+        uiManager.RedShow(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        uiManager.PurpleShow(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.WhiteShow(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
         SeitoRed.SetBool("isRedCard", false);
         SeitoPurple.SetBool("isRedCard", false);
         SeitoWhite.SetBool("isRedCard", false);
@@ -240,7 +252,7 @@ public class GaugeController : MonoBehaviour
         gameStateManager.IsButton1Enabled = false;
         gameStateManager.IsButton2Enabled = false;
 
-        gameManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        uiManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
 
 
         StartCoroutine(RedCoroutine());
@@ -249,9 +261,9 @@ public class GaugeController : MonoBehaviour
     private IEnumerator RedCoroutine()
     {
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if(gameManager.GetAnimationController() != null)
+        if(uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_Purple();
+            uiManager.GetAnimationController().Restart_Purple();
             
             StopCoroutine(RedCoroutine());
         }
@@ -262,7 +274,7 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("isPurple");
         SeitoPurple.SetBool("isPurple", false);
-        gameManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
 
          StartCoroutine(PurpleCoroutine());
     }
@@ -271,9 +283,9 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_purple");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (gameManager.GetAnimationController() != null)
+        if (uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_Purple();
+            uiManager.GetAnimationController().Restart_Purple();
             
             StopCoroutine(PurpleCoroutine());
         }
@@ -285,7 +297,7 @@ public class GaugeController : MonoBehaviour
         SeitoWhite.SetBool("isWhite", false);
         Phone.SetBool("isCall", false);
          
-        gameManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
+        uiManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
  
         StartCoroutine(WhiteCoroutine());
     }
@@ -294,9 +306,10 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_White");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (gameManager.GetAnimationController() != null)
+        if (uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_White();
+            Debug.Log("stop_White");
+            uiManager.GetAnimationController().Restart_White();
             
             StopCoroutine(WhiteCoroutine());
         }

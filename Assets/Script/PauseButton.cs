@@ -1,15 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public class PauseButton : MonoBehaviour
 {
     private int previousSceneIndex;
 
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private GameConstants gameConstants;
 
     private Animator FadePanel;
@@ -17,7 +15,7 @@ public class PauseButton : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        AnimatorController animatorController = gameManager.GetComponent<AnimatorController>();
+        AnimatorController animatorController = uiManager.GetComponent<AnimatorController>();
         if(animatorController != null )
         {
             FadePanel = animatorController.FadePanel;
@@ -27,14 +25,14 @@ public class PauseButton : MonoBehaviour
     
     public void OnPausePanel()
     {
-       gameManager.PauseShow(6,8);
+        uiManager.PauseShow(6,8);
         Time.timeScale = 0.0f;
     }
 
     public void OffPausePanel()
     {
         Time.timeScale = 1.0f;
-        gameManager.PauseHide(6,8);
+        uiManager.PauseHide(6,8);
     }
 
     public void OnSelectButton()
@@ -60,7 +58,8 @@ public class PauseButton : MonoBehaviour
         Time.timeScale = 1.0f;
         FadePanel.SetBool("isFadeIn", true);
         StartCoroutine(OnTitleLoad());
-    }
+    }  
+
 
     public IEnumerator OnTitleLoad()
     {

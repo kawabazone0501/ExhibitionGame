@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
@@ -8,12 +6,6 @@ public class GameStateManager : MonoBehaviour
 
     [SerializeField]
     private GameConstants gameConstants;
-
-
-    private void Awake()
-    {
-        
-    }
 
     public static GameStateManager Instance
     {

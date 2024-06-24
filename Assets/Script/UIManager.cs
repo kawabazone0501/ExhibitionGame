@@ -4,19 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class GameManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     /*
-        GameManager
+        UIManager
             
         UIを1つのスクリプトでまとめて参照させる
         
-        各スクリプトの
+        各スクリプトで使うImageやButtonを1つにまとめてここでまとめて参照させる
      
      */
 
     [SerializeField] private GameConstants gameConstants;
-    private static GameManager instance;
+    private static UIManager instance;
 
     [SerializeField] private StickController stickController;
     [SerializeField] private AnimationController animationController;
@@ -343,13 +343,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static GameManager Instance
+    public static UIManager Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<GameManager>();
+                instance = FindObjectOfType<UIManager>();
                 if (instance == null)
                 {
                     Debug.LogError("GameManager instance not found in the scene.");
@@ -372,41 +372,14 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-       FunctionNameConversion();
-       HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
-       HideButtonsInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
+        FunctionNameConversion();
+        HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
+        HideButtonsInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
     }
-
-
-    // コルーチンを開始するメソッド
-    //public void StartAnimation(float waitTime, string controllerName)
-    //{
-    //    StartCoroutine(AnimationCoroutine(waitTime, controllerName));
-    //}
-
-    //private IEnumerator AnimationCoroutine(float waitTime, string controllerName)
-    //{
-    //    yield return new WaitForSeconds(waitTime);
-
-    //    if (showImageActions.TryGetValue(controllerName, out var showImages))
-    //    {
-    //        showImages?.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Invalid controller name specified.");
-    //    }
-    //}
-
     
     private void Start()
     {
         Debug.Log("GameManager Start method called.");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
