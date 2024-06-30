@@ -9,8 +9,11 @@ public class LongPressButton : MonoBehaviour
     private Animator SeitoWhite;
     private Animator Teacher;
     private Animator Phone;
+    private Animator WhiteGuide;
     // ゲージの現在の値
     private float currentGaugeValue = 0.0f;
+
+    private bool isGuidePlayed = false;
     private void Start()
     {
 
@@ -20,11 +23,17 @@ public class LongPressButton : MonoBehaviour
             SeitoWhite = animatorController.SeitoWhite;
             Teacher = animatorController.Teacher;
             Phone = animatorController.Phone;
+            WhiteGuide = animatorController.WhiteGuide;
         }
     }
     // ボタンが押されたときの処理
     public void OnPointerDown()
     {
+        if (gameStateManager.WhiteGuidePlayed && !isGuidePlayed)
+        {
+            isGuidePlayed = true;
+            WhiteGuide.SetBool("isWhiteGuide", false);
+        }
         gameStateManager.IsButtonPressed = true;
         SeitoWhite.SetBool("isWhite", true);
         Phone.SetBool("isSupport", true);

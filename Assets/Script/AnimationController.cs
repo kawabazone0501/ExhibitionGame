@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour
@@ -15,6 +16,9 @@ public class AnimationController : MonoBehaviour
     private Animator SeitoWhite;
     private Animator Teacher;
     private Animator Phone;
+    private Animator RedGuide;
+    private Animator PurpleGuide;
+    private Animator WhiteGuide;
 
     
     public IEnumerator redColoutine;
@@ -82,6 +86,9 @@ public class AnimationController : MonoBehaviour
             SeitoWhite = animatorController.SeitoWhite;
             Teacher = animatorController.Teacher;
             Phone = animatorController.Phone;
+            RedGuide = animatorController.RedGuide;
+            PurpleGuide = animatorController.PurpleGuide;
+            WhiteGuide = animatorController.WhiteGuide;
         }
        
         redColoutine = redAnimation();
@@ -92,7 +99,7 @@ public class AnimationController : MonoBehaviour
         Debug.Log(gameStateManager.IsStudentLock);
     }
 
-    // Start is called before the first frame update
+    
     public void Start()
     {
         Debug.Log("void Start");
@@ -120,6 +127,7 @@ public class AnimationController : MonoBehaviour
             else if(ShouldPlayAnimation(gameConstants.StudentRED))
             {
                 gameStateManager.IsStudentLock = true;//Lock;
+                
                 PlayAnimation
                     (
                        ref red_arrival,
@@ -136,6 +144,16 @@ public class AnimationController : MonoBehaviour
                          gameConstants.EndDisplayImageRed,
                          gameConstants.AnimationClips[gameConstants.StudentRED].length + gameConstants.WaitAnimationTime
                       );
+                if(!gameStateManager.RedGuidePlayed)
+                {
+                    gameStateManager.RedGuidePlayed = true;
+                    RedInvokeGuideAnimation
+                   (
+                       gameConstants.AnimationClips[gameConstants.StudentRED].length
+                       + gameConstants.WaitAnimationTime
+                   );
+                }
+                
                 if (redColoutine != null) // CoroutineÇ™é¿çsíÜÇ≈Ç†ÇÍÇŒí‚é~
                 {
                     Debug.Log("stop_red");
@@ -187,6 +205,15 @@ public class AnimationController : MonoBehaviour
                         gameConstants.AnimationClips[gameConstants.StudentPURPLE].length
                         + gameConstants.WaitAnimationTime
                      );
+               if(!gameStateManager.PurpleGuidePlayed)
+                {
+                    gameStateManager.PurpleGuidePlayed = true;
+                    PurpleInvokeGuideAnimation
+                        (
+                            gameConstants.AnimationClips[gameConstants.StudentPURPLE].length
+                            + gameConstants.WaitAnimationTime
+                        );
+                }
                 if (purpleColoutine != null) // CoroutineÇ™é¿çsíÜÇ≈Ç†ÇÍÇŒí‚é~
                 {
                     Debug.Log("stop_purple");
@@ -236,7 +263,20 @@ public class AnimationController : MonoBehaviour
                         gameConstants.AnimationClips[gameConstants.StudentWHITE].length
                         + gameConstants.WaitAnimationTime
                      );
-                
+                if(!gameStateManager.WhiteGuidePlayed)
+                {
+                    gameStateManager.WhiteGuidePlayed = true;
+                    WhiteInvokeGuideAnimation
+                        (
+                            gameConstants.AnimationClips[gameConstants.StudentWHITE].length
+                            + gameConstants.WaitAnimationTime
+                        );
+                }
+                if(whiteColoutine == null)
+                {
+                    Debug.Log("stop_white");
+                    StopCoroutine(whiteColoutine);
+                }
             }
             else
             {
@@ -248,6 +288,57 @@ public class AnimationController : MonoBehaviour
         }
     }
     
+    private void RedInvokeGuideAnimation
+        (
+            float delay
+        )
+    {
+        StartCoroutine(RedInvokeAfterDelay(delay)); 
+    }
+
+    private IEnumerator RedInvokeAfterDelay
+        (
+            float delay
+        )
+    {
+        yield return new WaitForSeconds(delay);
+        RedGuide.SetBool("isRedGuide",true);
+    }
+
+    private void PurpleInvokeGuideAnimation
+        (
+            float delay
+        )
+    {
+        StartCoroutine(PurpleInvokeAfterDelay(delay));
+    }
+
+    private IEnumerator PurpleInvokeAfterDelay
+        (
+            float delay
+        )
+    {
+        yield return new WaitForSeconds(delay);
+        PurpleGuide.SetBool("isPurpleGuide", true);
+    }
+
+    private void WhiteInvokeGuideAnimation
+        (
+            float delay
+        )
+    {
+        StartCoroutine(WhiteInvokeAfterDelay(delay));
+    }
+
+    private IEnumerator WhiteInvokeAfterDelay
+        (
+            float delay
+        )
+    {
+        yield return new WaitForSeconds(delay);
+        WhiteGuide.SetBool("isWhiteGuide", true);
+    }
+
     private bool ShouldPlayAnimation( int studentNumber)
     {
         Debug.Log(gameStateManager.IsStudents[studentNumber]);

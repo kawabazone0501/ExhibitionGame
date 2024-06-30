@@ -107,6 +107,45 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public bool RedGuidePlayed
+    {
+        get => gameConstants.RedGuidePlayed;
+        set
+        {
+            Debug.Log($"RedGuidePlayed changed from {gameConstants.RedGuidePlayed} to {value}");
+            gameConstants.RedGuidePlayed = value;
+        }
+    }
+
+    public bool PurpleGuidePlayed
+    {
+        get=>gameConstants.PurpleGuidePlayed;
+        set
+        {
+            Debug.Log($"PurpleGuidePlayed changed from {gameConstants.PurpleGuidePlayed} to {value}");
+            gameConstants.PurpleGuidePlayed = value;
+        }
+    }
+
+    public bool WhiteGuidePlayed
+    {
+        get => gameConstants.WhiteGuidePlayed;
+        set
+        {
+            Debug.Log($"WhiteGuidePlayed changed from {gameConstants.WhiteGuidePlayed} to {value}");
+            gameConstants.WhiteGuidePlayed = value;
+        }
+    }
+
+    public bool TeacherGuidePlayed
+    {
+        get => gameConstants.TeacherGuidePlayed;
+        set
+        {
+            Debug.Log($"TeacherGuidePlayed changed from {gameConstants.TeacherGuidePlayed} to {value}");
+            gameConstants.TeacherGuidePlayed = value;
+        }
+    }
     public void SetAllStudentsFalse()
     {
         Debug.Log("SetAllStudentsFalse called");
@@ -121,5 +160,9 @@ public class GameStateManager : MonoBehaviour
         IsButtonPressed = false;
         IsButton1Enabled = false;
         IsButton2Enabled = false;
+        RedGuidePlayed = false;
+        PurpleGuidePlayed = false;
+        WhiteGuidePlayed = false;
+        TeacherGuidePlayed = false;
     }
 }

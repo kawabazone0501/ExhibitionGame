@@ -92,6 +92,23 @@ public class TimerCountDown : MonoBehaviour
 
     private IEnumerator SelectSceneLoad()
     {
+        if(uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSeason)
+        {
+            PlayerPrefs.SetInt("Score_1", uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSeason)
+        {
+            PlayerPrefs.SetInt("Score_2", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSeason)
+        {
+            PlayerPrefs.SetInt("Score_3", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
         yield return new WaitForSeconds(gameConstants.FadeWaitTime);
         SceneManager.LoadScene("StageSelectScene");
     }

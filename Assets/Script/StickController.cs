@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
     private Animator Teacher;
+    private Animator PurpleGuide;
     [SerializeField]
     private GameConstants gameConstants;
     [SerializeField]
@@ -26,7 +27,7 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     // UI画像のRectTransform
     public RectTransform imageRectTransform;
 
-  
+    private bool isGuidePlayed = false;
 
     
     
@@ -37,6 +38,7 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
         if (animatorController != null)
         {
             Teacher = animatorController.Teacher;
+            PurpleGuide = animatorController.PurpleGuide;
         }
         stickTransform = transform.GetChild(0).GetComponent<RectTransform>(); // スティックの子要素からRectTransformを取得
         backgroundTransform = GetComponent<RectTransform>(); // スティックの背景のRectTransformを取得
@@ -52,6 +54,11 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (gameStateManager.PurpleGuidePlayed && !isGuidePlayed)
+        {
+            isGuidePlayed = true;
+            PurpleGuide.SetBool("isPurpleGuide", false);
+        }
         OnDrag(eventData);
         Teacher.SetBool("vsPurple", true);
     }

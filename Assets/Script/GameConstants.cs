@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameConstants", menuName = "Constants/GameConstants")]
@@ -126,7 +127,11 @@ public class GameConstants : ScriptableObject
     // Ô‚Ì¶“k‚Ìƒ{ƒ^ƒ“‚Ì–îˆó‚ÌImage‚ÌØ‚è‘Ö‚¦‚Ì‚½‚ß‚Ì’è”
     private const int redButtonLeftArrow = 1;
     private const int redButtonRightArrow = 2;
-    private const int greenGauge = 5;
+    //---------------------------------------------------------------------------------------------------
+    private bool redGuidePlayed = false;
+    private bool purpleGuidePlayed = false;
+    private bool whiteGuidePlayed = false;
+    private bool teacherGuidePlayed = false;
     //---------------------------------------------------------------------------------------------------
 
     
@@ -259,4 +264,27 @@ public class GameConstants : ScriptableObject
         set => isClear = value;
     }
    
+    public bool RedGuidePlayed
+    {
+        get => redGuidePlayed;
+        set => redGuidePlayed = value;
+    }
+
+    public bool PurpleGuidePlayed
+    {
+        get => purpleGuidePlayed;
+        set => purpleGuidePlayed = value;
+    }
+
+    public bool WhiteGuidePlayed
+    {
+        get => whiteGuidePlayed;
+        set => whiteGuidePlayed = value;
+    }
+
+    public bool TeacherGuidePlayed
+    {
+        get => teacherGuidePlayed;
+        set => teacherGuidePlayed = value;
+    }
 }

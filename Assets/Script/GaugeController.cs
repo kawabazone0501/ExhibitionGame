@@ -13,6 +13,10 @@ public class GaugeController : MonoBehaviour
     private Animator SeitoWhite;
     private Animator Phone;
     private Animator GameClearPanel;
+    private Animator RedGuide;
+    private Animator TeacherGuide;
+    private Animator Teacher;
+
 
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private GameStateManager gameStateManager;
@@ -21,7 +25,13 @@ public class GaugeController : MonoBehaviour
     private int Bonus = 0;
     private int score = 0;
     public int Score => score;
-    
+
+    private bool RedGuidePlayed = false;
+    private bool TeacherGuidePlayed = false;
+
+    private bool isTeacherWork = false;
+    private float DelayTime = 3.0f;
+
     private void Awake()
     {
         
@@ -34,6 +44,9 @@ public class GaugeController : MonoBehaviour
             SeitoWhite = animatorController.SeitoWhite;
             Phone = animatorController.Phone;
             GameClearPanel = animatorController.GameClearPanel;
+            RedGuide = animatorController.RedGuide;
+            TeacherGuide = animatorController.TeacherGuide;
+            Teacher = animatorController.Teacher;
         }        
     }
     
@@ -47,6 +60,11 @@ public class GaugeController : MonoBehaviour
         else if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount > gameConstants.GaugeFillAmountThresholdReset && !gameStateManager.IsClear)
         {
             DecreaseGauge();
+        }
+        if(!gameStateManager.TeacherGuidePlayed)
+        {
+            gameStateManager.TeacherGuidePlayed = true;
+            TeacherGuide.SetBool("isTeacherGuide", true);
         }
     }
 
@@ -75,6 +93,16 @@ public class GaugeController : MonoBehaviour
 
     public void OnClickButton()
     {
+        if(gameStateManager.TeacherGuidePlayed&&!TeacherGuidePlayed)
+        {
+            TeacherGuidePlayed = true;
+            TeacherGuide.SetBool("isTeacherGuide", false);
+        }
+        if (!isTeacherWork)
+        {
+            Debug.Log("work");
+            StartCoroutine(AnimateWithDelay());
+        }
         // ボタンが既にクリックされている場合は、DecreaseGauge()を呼び出さない
         if (
             !gameStateManager.IsButtonClicked && 
@@ -88,7 +116,28 @@ public class GaugeController : MonoBehaviour
             gameStateManager.IsButtonClicked = true; // ボタンがクリックされたことを示すフラグを設定
         }
     }
+    private IEnumerator AnimateWithDelay()
+    {
+        Debug.Log("入った");
+        isTeacherWork = true;
+        // 50%の確率でどちらかのアニメーショントリガーをセット
+        if (Random.value < 0.5f)
+        {
+            Debug.Log("PC");
+            Teacher.SetTrigger("PCWork");
+        }
+        else
+        {
+            Debug.Log("Document");
+            Teacher.SetTrigger("DocumentWork");
+        }
+        // 変化したアニメーションが終了するまで待機
+        yield return new WaitForSeconds(DelayTime);
 
+        Teacher.SetTrigger("Wait");
+
+        isTeacherWork = false;
+    }   
     public void ClearScore()
     {
         GameClearPanel.SetBool("isScore", true);
@@ -129,6 +178,12 @@ public class GaugeController : MonoBehaviour
     // ボタン1がクリックされた時の処理
     public void OnRedButton1Clicked()
     {
+        Teacher.SetBool("vsRed", true);
+        if (gameStateManager.RedGuidePlayed && !RedGuidePlayed)
+        {
+            RedGuidePlayed = true;
+            RedGuide.SetBool("isRedGuide", false);
+        }
         if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             IncreaseGauge_W();
@@ -151,6 +206,12 @@ public class GaugeController : MonoBehaviour
     // ボタン2がクリックされた時の処理
     public void OnRedButton2Clicked()
     {
+        Teacher.SetBool("vsRed", true);
+        if (gameStateManager.RedGuidePlayed && !RedGuidePlayed)
+        {
+            RedGuidePlayed = true;
+            RedGuide.SetBool("isRedGuide", false);
+        }
         Debug.Log("2");
         if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
@@ -251,7 +312,7 @@ public class GaugeController : MonoBehaviour
         Debug.Log("isRed");
         gameStateManager.IsButton1Enabled = false;
         gameStateManager.IsButton2Enabled = false;
-
+        Teacher.SetBool("vsRed", false);
         uiManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
 
 
