@@ -10,7 +10,7 @@ public class LongPressButton : MonoBehaviour
     private Animator Teacher;
     private Animator Phone;
     private Animator WhiteGuide;
-    // �Q�[�W�̌��݂̒l
+    // ゲージの現在の値
     private float currentGaugeValue = 0.0f;
 
     private bool isGuidePlayed = false;
@@ -26,7 +26,7 @@ public class LongPressButton : MonoBehaviour
             WhiteGuide = animatorController.WhiteGuide;
         }
     }
-    // �{�^���������ꂽ�Ƃ��̏���
+    // ボタンが押されたときの処理
     public void OnPointerDown()
     {
         if (gameStateManager.WhiteGuidePlayed && !isGuidePlayed)
@@ -40,8 +40,7 @@ public class LongPressButton : MonoBehaviour
         Phone.SetBool("isCall", false);
         Teacher.SetBool("vsWhite", true);
     }
-
-    // �{�^���������ꂽ�Ƃ��̏���
+    // ボタンが離されたときの処理
     public void OnPointerUp()
     {
         gameStateManager.IsButtonPressed = false;
@@ -50,7 +49,7 @@ public class LongPressButton : MonoBehaviour
         Teacher.SetBool("vsWhite", false);
     }
 
-    // �X�V����
+    // 更新処理
     void Update()
     {
         if (gameStateManager.IsButtonPressed)
@@ -72,7 +71,7 @@ public class LongPressButton : MonoBehaviour
             }
         }
     }
-    // �Q�[�W�̍X�V
+    // ゲージの更新
     private void UpdateGauge()
     {
         uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;

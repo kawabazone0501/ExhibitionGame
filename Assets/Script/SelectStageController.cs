@@ -70,36 +70,45 @@ public class SelectStageController : MonoBehaviour
             highScoreTexts[i].text = "High Score: " + MaxScores[i].ToString("N0");
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    
     public void First_Season()
     {
-        Fade_animator.SetBool("isFadeIn", true);
+        /*Fade_animator.SetBool("isFadeIn", true);
         MaxSpawn = gameConstants.FirstSeason;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
-    }
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.FirstSpawn);
 
+    }
     public void Second_Season()
     {
-        Fade_animator.SetBool("isFadeIn", true);
+        /*Fade_animator.SetBool("isFadeIn", true);
         MaxSpawn = gameConstants.SecondSeason;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.SecondSpawn);
+
     }
 
     public void Third_Season()
     {
+        /*  //Fade_animator.SetBool("isFadeIn", true);
+          //MaxSpawn = gameConstants.ThirdSeason;
+          //PlayerPrefs.SetInt("isMax", MaxSpawn);
+          //Debug.Log(MaxSpawn);
+          //PlayerPrefs.Save();
+          //Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.ThirdSpawn);
+    }
+
+    public void SeasonChoice(int maxSpawn)
+    {
         Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = gameConstants.ThirdSeason;
+        MaxSpawn = maxSpawn;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
         Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
@@ -113,26 +122,42 @@ public class SelectStageController : MonoBehaviour
 
     public void RedCall()
     {
-        animator.SetBool("isRed", true);
+        /*animator.SetBool("isRed", true);
         profileCurrent = gameConstants.StudentRED;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isRed", gameConstants.StudentRED);
     }
     public void PurpleCall()
     {
-        animator.SetBool("isPurple", true);
+        /*animator.SetBool("isPurple", true);
         profileCurrent = gameConstants.StudentPURPLE;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isPurple", gameConstants.StudentPURPLE);
     }
     public void WhiteCall()
     {
-        animator.SetBool("isWhite", true);
+        /*animator.SetBool("isWhite", true);
         profileCurrent = gameConstants.StudentWHITE;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isWhite", gameConstants.StudentWHITE);
     }
     public void TeacherCall()
     {
-        animator.SetBool("isTeacher", true);
+        /*animator.SetBool("isTeacher", true);
         profileCurrent = gameConstants.Teacher;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isTeacher", gameConstants.Teacher);
+    }
+
+
+    public void ProfileCall(string animationName,int ProfileCurrent)
+    {
+        animator.SetBool(animationName, true);
+        profileCurrent = ProfileCurrent;
         Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
     public void OpenProfile()

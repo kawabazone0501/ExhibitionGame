@@ -1,80 +1,170 @@
-using UnityEditor;
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameConstants", menuName = "Constants/GameConstants")]
 public class GameConstants : ScriptableObject
 {
+    private static GameConstants instance;
+
+    public static GameConstants Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = Resources.Load<GameConstants>("GameConstants");
+                if (instance == null)
+                {
+                    Debug.LogError("GameConstants not found in Resources folder");
+                }
+            }
+            return instance;
+        }
+    }
+
+
     /*
         GameConstants
         
-           ƒQ[ƒ€’†A“Á’è‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å‚Ì‚ÝŽg—p‚³‚ê‚é
-            ’è”,bool’l“™‚ð•Û‘¶‚µ‚Ä‚¢‚éB
+           ã‚²ãƒ¼ãƒ ä¸­ã€ç‰¹å®šã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§ã®ã¿ä½¿ç”¨ã•ã‚Œã‚‹
+            å®šæ•°,boolå€¤ç­‰ã‚’ä¿å­˜ã—ã¦ã„ã‚‹ã€‚
 
-            —áF
-                Še¶“k‚ÌƒQ[ƒW‚Ì‘‰Á—Ê‚âƒQ[ƒ€ƒNƒŠƒAŽž‚ÌŠî‘bƒXƒRƒA‚âƒ{[ƒiƒXƒXƒRƒA
+            ä¾‹ï¼š
+                å„ç”Ÿå¾’ã®ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡ã‚„ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢æ™‚ã®åŸºç¤Žã‚¹ã‚³ã‚¢ã‚„ãƒœãƒ¼ãƒŠã‚¹ã‚¹ã‚³ã‚¢
      */
     //------------------------------------------------------------------------------------------------
-    // ƒQ[ƒ€ŠÖ˜A‚Ì’è”
-     private float gaugeFillAmountThreshold = 0.96f;                        // ƒQ[ƒW‚ª–žƒ^ƒ“‚É‚È‚Á‚½‚©‚ðŠm”F‚·‚é‚½‚ß‚Ì’è”
-     private float gaugeFillAmountThresholdFull = 1.0f;                     // ƒQ[ƒW‚Ì—Ê‚ª–žƒ^ƒ“‚É’B‚µ‚Ä‚¢‚é‚©‚ðŠm”F‚·‚é’è”(’B‚µ‚Ä‚È‚¯‚ê‚ÎƒQ[ƒW‚ð‘‚â‚·)
-     private float gaugeFillAmountThresholdReset = 0.0f;                    // ƒQ[ƒW—Ê‚ðƒŠƒZƒbƒg‚·‚é’è”
-    [SerializeField] private int bonusThresholdTime = 120;                  // ƒ{[ƒiƒXƒXƒRƒA‚ð“¾‚ç‚ê‚éƒ^ƒCƒ€‚©‚ð}‚é‚µ‚«‚¢’l
-    [SerializeField] private int baseScore = 18000;                         // ƒQ[ƒ€ƒNƒŠƒAŽž‚ÌŠî‘bƒXƒRƒA
-    [SerializeField] private int redArrivalScoreMultiplier = 700;           // Ô‚Ì¶“k‚ð‘Î‰ž‚µ‚½Û‚ÌƒXƒRƒA
-    [SerializeField] private int purpleArrivalScoreMultiplier = 600;        // Ž‡‚Ì¶“k‚ð‘Î‰ž‚µ‚½Û‚ÌƒXƒRƒA
-    [SerializeField] private int whiteArrivalScoreMultiplier = 500;         // ”’‚Ì¶“k‚Ì‚ð‘Î‰ž‚µ‚½Û‚ÌƒXƒRƒA
-    [SerializeField] private int bonusBaseScore = 30000;                    // ƒ{[ƒiƒXƒXƒRƒA
-    [SerializeField] private float totalTime = 180.0f;                      //§ŒÀŽžŠÔ@‚R•ª
+    // ã‚²ãƒ¼ãƒ é–¢é€£ã®å®šæ•°
+     private float gaugeFillAmountThreshold = 0.96f;                        // ã‚²ãƒ¼ã‚¸ãŒæº€ã‚¿ãƒ³ã«ãªã£ãŸã‹ã‚’ç¢ºèªã™ã‚‹ãŸã‚ã®å®šæ•°
+     private float gaugeFillAmountThresholdFull = 1.0f;                     // ã‚²ãƒ¼ã‚¸ã®é‡ãŒæº€ã‚¿ãƒ³ã«é”ã—ã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹å®šæ•°(é”ã—ã¦ãªã‘ã‚Œã°ã‚²ãƒ¼ã‚¸ã‚’å¢—ã‚„ã™)
+     private float gaugeFillAmountThresholdReset = 0.0f;                    // ã‚²ãƒ¼ã‚¸é‡ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹å®šæ•°
+    [SerializeField] private int bonusThresholdTime = 120;                  // ãƒœãƒ¼ãƒŠã‚¹ã‚¹ã‚³ã‚¢ã‚’å¾—ã‚‰ã‚Œã‚‹ã‚¿ã‚¤ãƒ ã‹ã‚’å›³ã‚‹ã—ãã„å€¤
+    [SerializeField] private int baseScore = 18000;                         // ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢æ™‚ã®åŸºç¤Žã‚¹ã‚³ã‚¢
+    [SerializeField] private int redArrivalScoreMultiplier = 700;           // èµ¤ã®ç”Ÿå¾’ã‚’å¯¾å¿œã—ãŸéš›ã®ã‚¹ã‚³ã‚¢
+    [SerializeField] private int purpleArrivalScoreMultiplier = 600;        // ç´«ã®ç”Ÿå¾’ã‚’å¯¾å¿œã—ãŸéš›ã®ã‚¹ã‚³ã‚¢
+    [SerializeField] private int whiteArrivalScoreMultiplier = 500;         // ç™½ã®ç”Ÿå¾’ã®ã‚’å¯¾å¿œã—ãŸéš›ã®ã‚¹ã‚³ã‚¢
+    [SerializeField] private int bonusBaseScore = 30000;                    // ãƒœãƒ¼ãƒŠã‚¹ã‚¹ã‚³ã‚¢
+    [SerializeField] private float totalTime = 180.0f;                      //åˆ¶é™æ™‚é–“ã€€ï¼“åˆ†
     //------------------------------------------------------------------------------------------------
-    // PlayerŠÖ˜A‚Ì’è”
-    private float increaseAmount = 0.025f;                                  // ƒQ[ƒW‚Ì‘‰Á—Ê
-    private float decreaseRateDecreaseAmount = 0.01f;                       // –ˆ•b‚ÌŒ¸­—¦‚ðŒ¸‚ç‚·—Ê
+    //ã‚²ãƒ¼ã‚¸ã«é–¢ä¿‚ã™ã‚‹ã‚¯ãƒ©ã‚¹
+    public static class GaugeConstants
+    {
+        public static readonly float IncreaseValue = 0.025f;               // ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡
+        public static readonly float DecreaseRateDecreaseValue= 0.01f;    // æ¯Žç§’ã®æ¸›å°‘çŽ‡ã‚’æ¸›ã‚‰ã™é‡
+        public static readonly float RedIncreaseValue = 0.05f;
+        public static readonly float RedCardIncreaseValue = 0.1f;
+        public static readonly float MaxStickDistance = 75f;
+        public static readonly float RotationThreshold = 360f;
+        public static readonly float PurpleIncreaseValue = 0.1f;
+        public static readonly float WhiteIncreaseValue = 0.5f;
+    }
+
+    // Playeré–¢é€£ã®å®šæ•°
+    private float increaseValue = 0.025f;               // ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡
+    private float decreaseRateDecreaseValue = 0.01f;    // æ¯Žç§’ã®æ¸›å°‘çŽ‡ã‚’æ¸›ã‚‰ã™é‡              
     //-------------------------------------------------------------------------------------------------
-    // Ô‚Ì¶“kŠÖ˜A‚Ì’è”
-    private float redIncreaseAmount = 0.05f;                                // ƒQ[ƒW‚Ì‘‰Á—Ê
-    private float redCardFillAmountIncrement = 0.1f;                        //ƒŒƒbƒhƒJ[ƒh‚ÌƒQ[ƒW‚Ì‘‰Á—Ê
+    // èµ¤ã®ç”Ÿå¾’é–¢é€£ã®å®šæ•°
+    private float redIncreaseAmount = 0.05f;                                // ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡
+    private float redCardFillAmountIncrement = 0.1f;                        //ãƒ¬ãƒƒãƒ‰ã‚«ãƒ¼ãƒ‰ã®ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡
     //-------------------------------------------------------------------------------------------------
-    // Ž‡‚Ì¶“kŠÖ˜A‚Ì’è”
-    private float maxStickDistance = 75f;                                   // ƒXƒeƒBƒbƒN‚ª“®‚­‚±‚Æ‚ª‚Å‚«‚éÅ‘å‹——£
-    private float rotationThreshold = 360f;                                 // 1Žü‚Æ‚Ý‚È‚·‰ñ“]—Ê‚Ìè‡’l
-    private float purpleIncreaseAmount = 0.1f;                              // ƒQ[ƒW‚Ì‘‰Á—Ê
+    // ç´«ã®ç”Ÿå¾’é–¢é€£ã®å®šæ•°
+    private float maxStickDistance = 75f;                                   // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå‹•ãã“ã¨ãŒã§ãã‚‹æœ€å¤§è·é›¢
+    private float rotationThreshold = 360f;                                 // 1å‘¨ã¨ã¿ãªã™å›žè»¢é‡ã®é–¾å€¤
+    private float purpleIncreaseAmount = 0.1f;                              // ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é‡
     //------------------------------------------------------------------------------------------------
-    // ”’‚Ì¶“kŠÖ˜A‚Ì’è”
-    private float gaugeIncreaseRate = 0.5f;                                 // ƒQ[ƒW‚Ì‘‰Á‘¬“x
+    // ç™½ã®ç”Ÿå¾’é–¢é€£ã®å®šæ•°
+    private float gaugeIncreaseRate = 0.5f;                                 // ã‚²ãƒ¼ã‚¸ã®å¢—åŠ é€Ÿåº¦
     //------------------------------------------------------------------------------------------------
-    // ŠeŽí¶“k‚Ìƒ{ƒ^ƒ“‚ÅŽg‚¤ bool’l
-    // Player‚Ìƒ{ƒ^ƒ“
-    private bool isButtonClicked = false;                                   // ƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-    // Ô‚Ì¶“k‚Ìƒ{ƒ^ƒ“
-    private bool isButton1Enabled = true;                                   // ƒ{ƒ^ƒ“1‚ª—LŒø‚©‚Ç‚¤‚©
-    private bool isButton2Enabled = false;                                  // ƒ{ƒ^ƒ“2‚ª—LŒø‚©‚Ç‚¤‚©
-    // ”’‚Ì¶“k‚Ìƒ{ƒ^ƒ“
-    private bool isButtonPressed = false;                                   // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ðŽ¦‚·ƒtƒ‰ƒO
-    // ƒŒƒbƒhƒJ[ƒh 
-    private bool isRedCard = false;                                         // ƒŒƒbƒhƒJ[ƒh‚ª‰Ÿ‚¹‚é‚©‚Ç‚¤‚©‚ð”»’f‚·‚éƒtƒ‰ƒO
+    // å„ç¨®ç”Ÿå¾’ã®ãƒœã‚¿ãƒ³ã§ä½¿ã† boolå€¤
+    // Playerã®ãƒœã‚¿ãƒ³
+    private bool isButtonClicked = false;                                   // ãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
+    // èµ¤ã®ç”Ÿå¾’ã®ãƒœã‚¿ãƒ³
+    private bool isButton1Enabled = true;                                   // ãƒœã‚¿ãƒ³1ãŒæœ‰åŠ¹ã‹ã©ã†ã‹
+    private bool isButton2Enabled = false;                                  // ãƒœã‚¿ãƒ³2ãŒæœ‰åŠ¹ã‹ã©ã†ã‹
+    // ç™½ã®ç”Ÿå¾’ã®ãƒœã‚¿ãƒ³
+    private bool isButtonPressed = false;                                   // ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’ç¤ºã™ãƒ•ãƒ©ã‚°
+    // ãƒ¬ãƒƒãƒ‰ã‚«ãƒ¼ãƒ‰ 
+    private bool isRedCard = false;                                         // ãƒ¬ãƒƒãƒ‰ã‚«ãƒ¼ãƒ‰ãŒæŠ¼ã›ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã™ã‚‹ãƒ•ãƒ©ã‚°
     //--------------------------------------------------------------------------------------------------
-    // ¶“k‚ÌoŒ»A‘Þê‚ÉŠÖ˜A‚·‚é bool’l‚ÆƒQ[ƒ€ƒNƒŠƒA‚Ì bool’l
-    private bool[] isStudents = new bool[3];                                // 3l‚Ì¶“k‚ª‚»‚ê‚¼‚êoŒ»‚µ‚Ä‚¢‚é‚©‚ÌŒÂ•Ê‚Ìƒtƒ‰ƒO
-    private bool isStudentLock = false;                                     // ª‚Ì bool‚ª•ÏX‚³‚ê‚é‘O‚ÉƒƒbƒN‚ð‚©‚¯AŠmŽÀ‚É true‚É‚È‚Á‚½‚Ì‚ð”»’f‚·‚é
-    private bool isObjectAllowed = false;                                   // ¶“k‚ªoŒ»‚µ‚½‚±‚Æ‚ðŽ¦‚·ƒtƒ‰ƒO
-    private bool isClear = false;                                           // ƒQ[ƒ€ƒNƒŠƒA‚ÌðŒ‚ð–ž‚½‚µ‚½‚©‚ð”»’f‚·‚éƒtƒ‰ƒO
+    // ç”Ÿå¾’ã®å‡ºç¾ã€é€€å ´ã«é–¢é€£ã™ã‚‹ boolå€¤ã¨ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã® boolå€¤
+    private bool[] isStudents = new bool[3];                                // 3äººã®ç”Ÿå¾’ãŒãã‚Œãžã‚Œå‡ºç¾ã—ã¦ã„ã‚‹ã‹ã®å€‹åˆ¥ã®ãƒ•ãƒ©ã‚°
+    private bool isStudentLock = false;                                     // â†‘ã® boolãŒå¤‰æ›´ã•ã‚Œã‚‹å‰ã«ãƒ­ãƒƒã‚¯ã‚’ã‹ã‘ã€ç¢ºå®Ÿã« trueã«ãªã£ãŸã®ã‚’åˆ¤æ–­ã™ã‚‹
+    private bool isObjectAllowed = false;                                   // ç”Ÿå¾’ãŒå‡ºç¾ã—ãŸã“ã¨ã‚’ç¤ºã™ãƒ•ãƒ©ã‚°
+    private bool isClear = false;                                           // ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã®æ¡ä»¶ã‚’æº€ãŸã—ãŸã‹ã‚’åˆ¤æ–­ã™ã‚‹ãƒ•ãƒ©ã‚°
     //--------------------------------------------------------------------------------------------------
-    // “ïˆÕ“x‚²‚Æ‚Ì”wŒi‚ÌƒIƒuƒWƒFƒNƒg‚ð•Û‘¶‚·‚é’è”
-    private const int object_A = 0;                                         //‘OŠúƒXƒe[ƒW‚Ì”wŒi
-    private const int object_B = 1;                                         //‘OŠúƒXƒe[ƒW‚ÌƒJƒEƒ“ƒ^[
-    private const int object_C = 2;                                         //‰Ä‹x‚ÝƒXƒe[ƒW‚Ì”wŒi
-    private const int object_D = 3;                                         //‰Ä‹x‚ÝƒXƒe[ƒW‚ÌƒJƒEƒ“ƒ^[
-    private const int object_E = 4;                                         //ŒãŠúƒXƒe[ƒW‚Ì”wŒi
-    private const int object_F = 5;                                         //ŒãŠúƒXƒe[ƒW‚ÌƒJƒEƒ“ƒ^[
+    //UIã®è¡¨ç¤ºã«é–¢ä¿‚ã™ã‚‹ã‚¯ãƒ©ã‚¹
+    public static class UIConstants
+    {
+        public enum SceneObject
+        {
+            FirstSeasonCounter,
+            FirstSeasonTable,
+            SecondSeasonCounter,
+            SecondSeasonTable,
+            ThirdSeasonCounter,
+            ThirdSeasonTable
+        }
+        
+        public enum SchoolMember
+        {
+            Red,
+            Purple,
+            White,
+            Teacher
+        }
+        
+        public enum Season
+        {
+           FirstSeason,
+           SecondSeason,
+           ThirdSeason,
+        }
+
+        public enum Spawn
+        {
+           NULL,
+           FirstSpawn,
+           SecondSpawn,
+           ThirdSpawn
+        }
+
+        // ãƒœã‚¿ãƒ³ã‚„ç”»åƒã®éžè¡¨ç¤ºã«ã™ã‚‹ç¯„å›²ã‚’æŒ‡å®šã™ã‚‹
+        //(Lengthã‚’ä½¿ã‚ãªã„ã®ã¯å¸¸ã«è¡¨ç¤ºã™ã‚‹ãƒœã‚¿ãƒ³ã‚„UIãŒã‚ã‚‹ãŸã‚)
+        public static readonly int StartImage = 1;
+        public static readonly int StartButton = 2;
+        public static readonly int EndImage = 11;
+        //èµ¤ã®ç”Ÿå¾’ã®ç”»åƒã®ç¯„å›²
+        public static readonly int StartImageRed = 2;
+        public static readonly int EndImageRed = 4;
+        public static readonly int StartButtonRed = 2;
+        public static readonly int EndButtonRed = 3;
+        //ç´«ã®ç”Ÿå¾’ã®ç”»åƒã®ç¯„å›²
+        public static readonly int StartImagePurple = 5;
+        public static readonly int EndImagePurple = 9;
+        //ç™½ã®ç”Ÿå¾’ã®ç”»åƒã®ç¯„å›²
+        public static readonly int StartImageWhite = 10;
+        public static readonly int EndImageWhite = 11;
+        public static readonly int ButtonWhite;
+
+        public static readonly int FadePanel = 13;
+    }
+    
+    // é›£æ˜“åº¦ã”ã¨ã®èƒŒæ™¯ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¿å­˜ã™ã‚‹å®šæ•°
+    private const int object_A = 0;                                         //å‰æœŸã‚¹ãƒ†ãƒ¼ã‚¸ã®èƒŒæ™¯
+    private const int object_B = 1;                                         //å‰æœŸã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+    private const int object_C = 2;                                         //å¤ä¼‘ã¿ã‚¹ãƒ†ãƒ¼ã‚¸ã®èƒŒæ™¯
+    private const int object_D = 3;                                         //å¤ä¼‘ã¿ã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+    private const int object_E = 4;                                         //å¾ŒæœŸã‚¹ãƒ†ãƒ¼ã‚¸ã®èƒŒæ™¯
+    private const int object_F = 5;                                         //å¾ŒæœŸã‚¹ãƒ†ãƒ¼ã‚¸ã®ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
     //--------------------------------------------------------------------------------------------------
-    // 3l‚Ì¶“k‚Ì”z—ñ‚Ì’è”
+    // 3äººã®ç”Ÿå¾’ã®é…åˆ—ã®å®šæ•°
     private const int studentRED = 0;
     private const int studentPURPLE = 1;
     private const int studentWHITE = 2;
-    // æ¶‚Ì’è”
+    // å…ˆç”Ÿã®å®šæ•°
     private const int teacher = 3;
     //--------------------------------------------------------------------------------------------------
-    // ƒ{ƒ^ƒ“‚â‰æ‘œ‚Ì”ñ•\Ž¦‚É‚·‚é”ÍˆÍ‚ðŽw’è‚·‚é(í‚É•\Ž¦‚·‚éƒ{ƒ^ƒ“‚âUI‚ª‚ ‚é‚½‚ß)
+    // ãƒœã‚¿ãƒ³ã‚„ç”»åƒã®éžè¡¨ç¤ºã«ã™ã‚‹ç¯„å›²ã‚’æŒ‡å®šã™ã‚‹(å¸¸ã«è¡¨ç¤ºã™ã‚‹ãƒœã‚¿ãƒ³ã‚„UIãŒã‚ã‚‹ãŸã‚)
     private const int neverDisplayImage = 1;
     private const int neverDisplayButton = 2;
     private const int endDisplayImage = 11;
@@ -96,16 +186,19 @@ public class GameConstants : ScriptableObject
     private const int fadePanel = 13;
     //--------------------------------------------------------------------------------------------------
 
-    // “ïˆÕ“x‚²‚Æ‚Ì”wŒi‚ÌƒIƒuƒWƒFƒNƒg‚ÌØ‚è‘Ö‚¦‚ðs‚¤‚½‚ß‚Ì”äŠr‚Ì‚½‚ß‚Ì’è”
+    // é›£æ˜“åº¦ã”ã¨ã®èƒŒæ™¯ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆ‡ã‚Šæ›¿ãˆã‚’è¡Œã†ãŸã‚ã®æ¯”è¼ƒã®ãŸã‚ã®å®šæ•°
     private const int firstSeason = 0;
     private const int secondSeason = 1;
     private const int thirdSeason = 2;
+    private const int firstSpawn = 1;
+    private const int secondSpawn = 2;
+    private const int thirdSpawn = 3;
     //--------------------------------------------------------------------------------------------------
-    // Ä¶‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
+    // å†ç”Ÿã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—
     [SerializeField] private AnimationClip[] animationClips;
 
     //---------------------------------------------------------------------------------------------------
-    // ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘Ò‚¿ŽžŠÔ(‘Ò‚¿ŽžŠÔ‚Ì•b”‚¾‚¯‘Ò‚Á‚½Œã‚Éˆ—‚ðs‚¤)
+    // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å¾…ã¡æ™‚é–“(å¾…ã¡æ™‚é–“ã®ç§’æ•°ã ã‘å¾…ã£ãŸå¾Œã«å‡¦ç†ã‚’è¡Œã†)
     private const float waitAnimationTime = 0.5f;
     private const float profileDisplayWaitingTime = 1.0f;
     private const float fadeWaitTime = 3.0f;
@@ -113,7 +206,7 @@ public class GameConstants : ScriptableObject
     private const float exitWaitingTime = 5.0f;
     private const float waitTimeIfNotPlayed = 5.0f;
     //---------------------------------------------------------------------------------------------------
-    // ƒ{ƒ^ƒ“‚âƒQ[ƒW‚Ì”z—ñ‚ÅFillAmount‚Ì’l‚ð•ÏX‚·‚éƒQ[ƒW‚â’l‚ð•Ï“®‚³‚¹‚éƒ{ƒ^ƒ“‚ðŽw’è‚·‚é’è”
+    // ãƒœã‚¿ãƒ³ã‚„ã‚²ãƒ¼ã‚¸ã®é…åˆ—ã§FillAmountã®å€¤ã‚’å¤‰æ›´ã™ã‚‹ã‚²ãƒ¼ã‚¸ã‚„å€¤ã‚’å¤‰å‹•ã•ã›ã‚‹ãƒœã‚¿ãƒ³ã‚’æŒ‡å®šã™ã‚‹å®šæ•°
     private const int playerGauge = 0;
     private const int redGauge = 4;
     private const int purpleGauge = 6;
@@ -124,7 +217,7 @@ public class GameConstants : ScriptableObject
     private const int redButtonRight = 3;
     private const int redCardButton = 4;
     //---------------------------------------------------------------------------------------------------
-    // Ô‚Ì¶“k‚Ìƒ{ƒ^ƒ“‚Ì–îˆó‚ÌImage‚ÌØ‚è‘Ö‚¦‚Ì‚½‚ß‚Ì’è”
+    // èµ¤ã®ç”Ÿå¾’ã®ãƒœã‚¿ãƒ³ã®çŸ¢å°ã®Imageã®åˆ‡ã‚Šæ›¿ãˆã®ãŸã‚ã®å®šæ•°
     private const int redButtonLeftArrow = 1;
     private const int redButtonRightArrow = 2;
     //---------------------------------------------------------------------------------------------------
@@ -133,9 +226,9 @@ public class GameConstants : ScriptableObject
     private bool whiteGuidePlayed = false;
     private bool teacherGuidePlayed = false;
     //---------------------------------------------------------------------------------------------------
-
-    
-    // ƒvƒƒpƒeƒB‚ðŽQÆ‚µ‚Ä“Ç‚Ýž‚Þ
+    private bool isTutorial = false;
+    //---------------------------------------------------------------------------------------------------
+    // ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å‚ç…§ã—ã¦èª­ã¿è¾¼ã‚€
     public float GaugeFillAmountThreshold => gaugeFillAmountThreshold;
     public float GaugeFillAmountThresholdFull => gaugeFillAmountThresholdFull;
     public float GaugeFillAmountThresholdReset => gaugeFillAmountThresholdReset;
@@ -147,8 +240,8 @@ public class GameConstants : ScriptableObject
     public int BonusBaseScore => bonusBaseScore;
     public float TotalTime => totalTime;
     //---------------------------------------------------------------------------------------------------
-    public float IncreaseAmount => increaseAmount;
-    public float DecreaseRateDecreaseAmount => decreaseRateDecreaseAmount;
+    public float IncreaseValue => increaseValue;
+    public float DecreaseRateDecreaseValue => decreaseRateDecreaseValue;
     //---------------------------------------------------------------------------------------------------
     public float RedIncreaseAmount => redIncreaseAmount;
     public float RedCardFillAmountIncrement => redCardFillAmountIncrement;
@@ -179,6 +272,9 @@ public class GameConstants : ScriptableObject
     public int FirstSeason => firstSeason;
     public int SecondSeason => secondSeason;
     public int ThirdSeason => thirdSeason;
+    public int FirstSpawn=> firstSpawn;
+    public int SecondSpawn=> secondSpawn;
+    public int ThirdSpawn=> thirdSpawn;
     //---------------------------------------------------------------------------------------------------
     public AnimationClip[] AnimationClips => animationClips;
     //---------------------------------------------------------------------------------------------------
@@ -286,5 +382,11 @@ public class GameConstants : ScriptableObject
     {
         get => teacherGuidePlayed;
         set => teacherGuidePlayed = value;
+    }
+
+    public bool IsTutorial
+    {
+        get => isTutorial;
+        set => isTutorial = value;
     }
 }

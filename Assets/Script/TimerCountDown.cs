@@ -8,7 +8,7 @@ public class TimerCountDown : MonoBehaviour
     private Animator GameOverPanel;
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private UIManager uiManager;
-    private float timeRemaining;//ƒQ[ƒ€‚Ìc‚èŠÔ
+    private float timeRemaining;//ã‚²ãƒ¼ãƒ ã®æ®‹ã‚Šæ™‚é–“
 
     private void Awake()
     {
@@ -113,6 +113,7 @@ public class TimerCountDown : MonoBehaviour
         SceneManager.LoadScene("StageSelectScene");
     }
 
+   
     private IEnumerator TitleSceneLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime);

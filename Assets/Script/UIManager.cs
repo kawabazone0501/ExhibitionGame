@@ -9,9 +9,9 @@ public class UIManager : MonoBehaviour
     /*
         UIManager
             
-        UI‚ğ1‚Â‚ÌƒXƒNƒŠƒvƒg‚Å‚Ü‚Æ‚ß‚ÄQÆ‚³‚¹‚é
+        UIã‚’1ã¤ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ã¾ã¨ã‚ã¦å‚ç…§ã•ã›ã‚‹
         
-        ŠeƒXƒNƒŠƒvƒg‚Åg‚¤Image‚âButton‚ğ1‚Â‚É‚Ü‚Æ‚ß‚Ä‚±‚±‚Å‚Ü‚Æ‚ß‚ÄQÆ‚³‚¹‚é
+        å„ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ä½¿ã†Imageã‚„Buttonã‚’1ã¤ã«ã¾ã¨ã‚ã¦ã“ã“ã§ã¾ã¨ã‚ã¦å‚ç…§ã•ã›ã‚‹
      
      */
 
@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
 
 
     //--------------------------------------------------------------------------------
-    //ƒvƒŒƒCƒ„[ŠÖ˜A‚ÌUI
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼é–¢é€£ã®UI
     //--------------------------------------------------------------------------------
    
     [SerializeField] private Image[] gaugeImages;
@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image pausePanel;
 
     //--------------------------------------------------------------------------------
-    // ƒfƒŠƒQ[ƒg‚Ì’è‹`
+    // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆã®å®šç¾©
     private Action<int, int> redHide;
     private Action<int, int> redShow;
     private Action<int, int> purpleHide;
@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
     private Action<int, int> pauseHide;
     private Action<int, int> pauseShow;
 
-    // ƒfƒŠƒQ[ƒg‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒvƒƒpƒeƒB
+    // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     public Action<int, int> RedHide => redHide;
     public Action<int, int> RedShow => redShow;
     public Action<int, int> PurpleHide => purpleHide;
@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
 
     public void FunctionNameConversion()
     {
-        // ƒfƒŠƒQ[ƒg•Ï”‚ÉŠÖ”‚ğ‘ã“ü
+        // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆå¤‰æ•°ã«é–¢æ•°ã‚’ä»£å…¥
         redHide = RedHideImages;
         redShow = RedShowImages;
         purpleHide = PurpleHideImages;
@@ -149,15 +149,12 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        // ‚·‚×‚Ä‚Ì‰æ‘œ‚ğˆê’U”ñ•\¦‚É‚·‚é
-        //HideImagesInRange (gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
-
-        // w’è‚³‚ê‚½”ÍˆÍ“à‚Ì‰æ‘œ‚Ì‚İ‚ğ•\¦‚·‚é
+        // æŒ‡å®šã•ã‚ŒãŸç¯„å›²å†…ã®ç”»åƒã®ã¿ã‚’è¡¨ç¤ºã™ã‚‹
         for (int i = start; i <= end; i++)
         {
             if (GaugeImages[i] != null)
             {
-                GaugeImages[i].enabled = true;  // ‰æ‘œ‚ğ•\¦‚·‚é
+                GaugeImages[i].enabled = true;  // ç”»åƒã‚’è¡¨ç¤ºã™ã‚‹
             }
         }
         
@@ -170,10 +167,10 @@ public class UIManager : MonoBehaviour
             Debug.LogError("Invalid range provided.");
             return;
         }
-        // ‚·‚×‚Ä‚Ì‰æ‘œ‚ğˆê’U”ñ•\¦‚É‚·‚é
+        // ã™ã¹ã¦ã®ç”»åƒã‚’ä¸€æ—¦éè¡¨ç¤ºã«ã™ã‚‹
         //HideImagesInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
 
-        // w’è‚³‚ê‚½”ÍˆÍ“à‚Ì‰æ‘œ‚Ì‚İ‚ğ•\¦‚·‚é
+        // æŒ‡å®šã•ã‚ŒãŸç¯„å›²å†…ã®ç”»åƒã®ã¿ã‚’è¡¨ç¤ºã™ã‚‹
         for (int i = start; i <= end; i++)
         {
             if (buttons[i] != null)

@@ -12,7 +12,6 @@ public class PauseButton : MonoBehaviour
 
     private Animator FadePanel;
 
-    // Start is called before the first frame update
     private void Awake()
     {
         AnimatorController animatorController = uiManager.GetComponent<AnimatorController>();
@@ -46,10 +45,10 @@ public class PauseButton : MonoBehaviour
     private IEnumerator OnSelectLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime);
-        // ‘O‚ÌƒV[ƒ“‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾‚·‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—ã™ã‚‹
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
 
-        // ‘O‚ÌƒV[ƒ“‚É–ß‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
         SceneManager.LoadScene(previousSceneIndex);
     }
 
@@ -64,10 +63,10 @@ public class PauseButton : MonoBehaviour
     public IEnumerator OnTitleLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime); 
-        // ‘O‚ÌƒV[ƒ“‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾‚·‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—ã™ã‚‹
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 2;
 
-        // ‘O‚ÌƒV[ƒ“‚É–ß‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
         SceneManager.LoadScene(previousSceneIndex);
     }
 }

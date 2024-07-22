@@ -146,6 +146,16 @@ public class GameStateManager : MonoBehaviour
             gameConstants.TeacherGuidePlayed = value;
         }
     }
+
+    public bool IsTutorial
+    {
+        get=>gameConstants.IsTutorial;
+        set
+        {
+            Debug.Log($"IsTutorial changed from {gameConstants.IsTutorial} to {value}");
+            gameConstants.IsTutorial = value;
+        }
+    }
     public void SetAllStudentsFalse()
     {
         Debug.Log("SetAllStudentsFalse called");
@@ -154,6 +164,7 @@ public class GameStateManager : MonoBehaviour
             IsStudents[i] = false;
             Debug.Log($"IsStudents[{i}] set to false");
         }
+
         IsStudentLock = false;
         IsObjectAllowed = false;
         IsClear = false;

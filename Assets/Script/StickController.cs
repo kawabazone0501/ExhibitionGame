@@ -12,25 +12,23 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     [SerializeField]
     private UIManager uiManager;
 
-    private RectTransform stickTransform; // ƒXƒeƒBƒbƒN‚ÌRectTransform
-    private RectTransform backgroundTransform; // ƒXƒeƒBƒbƒN‚Ì”wŒi‚ÌRectTransform
+    private RectTransform stickTransform; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®RectTransform
+    private RectTransform backgroundTransform; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®èƒŒæ™¯ã®RectTransform
 
-    private Vector2 stickStartPosition; // ƒXƒeƒBƒbƒN‚Ì‰ŠúˆÊ’u
-    private Vector2 stickDirection; // ƒXƒeƒBƒbƒN‚Ì•ûŒü
-    private float totalRotation = 0f; // ƒXƒeƒBƒbƒN‚Ì‘‰ñ“]—Ê
+    private Vector2 stickStartPosition; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®åˆæœŸä½ç½®
+    private Vector2 stickDirection; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘
+    private float totalRotation = 0f; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®ç·å›è»¢é‡
     public float TotalRotation => totalRotation;
-    private Vector2 prevStickDirection; // ‘O‚ÌƒtƒŒ[ƒ€‚ÌƒXƒeƒBƒbƒN‚Ì•ûŒü
+    private Vector2 prevStickDirection; // å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘
 
-    // ‰ŠúˆÊ’u‚ğ‹L˜^‚·‚é‚½‚ß‚Ì•Ï”
+    // åˆæœŸä½ç½®ã‚’è¨˜éŒ²ã™ã‚‹ãŸã‚ã®å¤‰æ•°
     private Vector2 initialPosition;
 
-    // UI‰æ‘œ‚ÌRectTransform
+    // UIç”»åƒã®RectTransform
     public RectTransform imageRectTransform;
 
     private bool isGuidePlayed = false;
 
-    
-    
     void Awake()
     {
        
@@ -40,18 +38,17 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
             Teacher = animatorController.Teacher;
             PurpleGuide = animatorController.PurpleGuide;
         }
-        stickTransform = transform.GetChild(0).GetComponent<RectTransform>(); // ƒXƒeƒBƒbƒN‚Ìq—v‘f‚©‚çRectTransform‚ğæ“¾
-        backgroundTransform = GetComponent<RectTransform>(); // ƒXƒeƒBƒbƒN‚Ì”wŒi‚ÌRectTransform‚ğæ“¾
+        stickTransform = transform.GetChild(0).GetComponent<RectTransform>(); // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å­è¦ç´ ã‹ã‚‰RectTransformã‚’å–å¾—
+        backgroundTransform = GetComponent<RectTransform>(); // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®èƒŒæ™¯ã®RectTransformã‚’å–å¾—
     }
 
     void Start()
     {
-        stickStartPosition = stickTransform.anchoredPosition; // ƒXƒeƒBƒbƒN‚Ì‰ŠúˆÊ’u‚ğæ“¾
-        prevStickDirection = Vector2.right; // ‰Šú’l‚ğİ’è
-        // UI—v‘f‚Ì‰ŠúˆÊ’u‚ğ‹L˜^‚·‚é
+        stickStartPosition = stickTransform.anchoredPosition; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®åˆæœŸä½ç½®ã‚’å–å¾—
+        prevStickDirection = Vector2.right; // åˆæœŸå€¤ã‚’è¨­å®š
+        // UIè¦ç´ ã®åˆæœŸä½ç½®ã‚’è¨˜éŒ²ã™ã‚‹
         initialPosition = imageRectTransform.anchoredPosition;
     }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         if (gameStateManager.PurpleGuidePlayed && !isGuidePlayed)
@@ -66,8 +63,8 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
     public void OnPointerUp(PointerEventData eventData)
     {
         Teacher.SetBool("vsPurple", false);
-        stickTransform.anchoredPosition = stickStartPosition; // ƒXƒeƒBƒbƒN‚ğ‰ŠúˆÊ’u‚É–ß‚·
-        stickDirection = Vector2.zero; // ƒXƒeƒBƒbƒN‚Ì•ûŒü‚ğƒŠƒZƒbƒg‚·‚é
+        stickTransform.anchoredPosition = stickStartPosition; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚’åˆæœŸä½ç½®ã«æˆ»ã™
+        stickDirection = Vector2.zero; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -85,7 +82,7 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
             Vector2 movePos = new Vector2(x, y);
             Vector2 clampPos = movePos - backgroundTransform.sizeDelta / 2f;
 
-            // ƒXƒeƒBƒbƒN‚ª“®‚­‚±‚Æ‚ª‚Å‚«‚é”ÍˆÍ‚ğ§ŒÀ‚·‚é
+            // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå‹•ãã“ã¨ãŒã§ãã‚‹ç¯„å›²ã‚’åˆ¶é™ã™ã‚‹
             if (Vector2.Distance(stickStartPosition, clampPos) <= gameConstants.MaxStickDistance)
             {
                 stickTransform.anchoredPosition = clampPos;
@@ -95,51 +92,51 @@ public class StickController : MonoBehaviour, IDragHandler, IPointerDownHandler,
                 stickTransform.anchoredPosition = stickStartPosition + (clampPos - stickStartPosition).normalized * gameConstants.MaxStickDistance;
             }
 
-            stickDirection = (stickTransform.anchoredPosition - stickStartPosition).normalized; // ƒXƒeƒBƒbƒN‚Ì•ûŒü‚ğŒvZ‚·‚é
+            stickDirection = (stickTransform.anchoredPosition - stickStartPosition).normalized; // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘ã‚’è¨ˆç®—ã™ã‚‹
 
-            // ƒXƒeƒBƒbƒN‚Ì‰ñ“]—Ê‚ğXV‚·‚é
+            // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å›è»¢é‡ã‚’æ›´æ–°ã™ã‚‹
             float rotationAmount = Vector2.SignedAngle(prevStickDirection, stickDirection);
             totalRotation += rotationAmount;
 
-            // ‘O‚ÌƒtƒŒ[ƒ€‚ÌƒXƒeƒBƒbƒN‚Ì•ûŒü‚ğXV‚·‚é
+            // å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘ã‚’æ›´æ–°ã™ã‚‹
             prevStickDirection = stickDirection;
 
-            // ƒXƒeƒBƒbƒN‚ª1ü‚µ‚½ê‡AƒQ[ƒW‚ğ‘‚â‚µ‚ÄƒŠƒZƒbƒg‚·‚é
+            // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒ1å‘¨ã—ãŸå ´åˆã€ã‚²ãƒ¼ã‚¸ã‚’å¢—ã‚„ã—ã¦ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             if (Mathf.Abs(totalRotation) >= gameConstants.RotationThreshold)
             {
                 IncreaseGauge();
-                totalRotation = 0f; // ‘‰ñ“]—Ê‚ğƒŠƒZƒbƒg‚·‚é
+                totalRotation = 0f; // ç·å›è»¢é‡ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             }
         }
     }
 
     public Vector2 GetStickDirection()
     {
-        return stickDirection; // Œ»İ‚ÌƒXƒeƒBƒbƒN‚Ì•ûŒü‚ğ•Ô‚·
+        return stickDirection; // ç¾åœ¨ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ–¹å‘ã‚’è¿”ã™
     }
 
     private void IncreaseGauge()
     {
         if (uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount < 1.0f)
         {
-            // ƒQ[ƒW‚Ì’l‚ğ‘‰Á‚³‚¹‚é
-            Debug.Log("‘‰Á");
+            // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’å¢—åŠ ã•ã›ã‚‹
+            Debug.Log("å¢—åŠ ");
             uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount += gameConstants.PurpleIncreaseAmount;
         }
         else if (uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
-            Debug.Log("I—¹");
+            Debug.Log("çµ‚äº†");
             Teacher.SetBool("vsPurple", false);
             ResetToInitialPosition();
             gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
             uiManager.GetGaugeController().OnGaugeFull_purple();
             totalRotation = 0f;
         }
-        // ƒQ[ƒW‚Ì’l‚ğ0‚©‚ç1‚Ì”ÍˆÍ‚ÉƒNƒ‰ƒ“ƒv‚·‚é
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’0ã‹ã‚‰1ã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹
         uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PurpleGauge].fillAmount);
     }
 
-    // À•W‚ğ‰ŠúˆÊ’u‚ÉƒŠƒZƒbƒg‚·‚éŠÖ”
+    // åº§æ¨™ã‚’åˆæœŸä½ç½®ã«ãƒªã‚»ãƒƒãƒˆã™ã‚‹é–¢æ•°
     public void ResetToInitialPosition()
     {
         Teacher.SetBool("vsPurple", false);

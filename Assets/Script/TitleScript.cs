@@ -26,19 +26,10 @@ public class TitleScript : MonoBehaviour
         fade_animator = fadeObj.GetComponent<Animator>();
        
     }
-
-   
-    // Start is called before the first frame update
     void Start()
     {
        
         fade_animator.SetBool("isFadeOut", true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SelectButton()

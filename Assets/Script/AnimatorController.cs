@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimatorController : MonoBehaviour
 {
-    // ŠeƒAƒjƒ[ƒ^[‚ğƒCƒ“ƒXƒyƒNƒ^[‚©‚çİ’è‚Å‚«‚é‚æ‚¤‚É[SerializeField]‚ğg—p
+    // å„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã‚’ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‹ã‚‰è¨­å®šã§ãã‚‹ã‚ˆã†ã«[SerializeField]ã‚’ä½¿ç”¨
     [SerializeField] private Animator seitoRed;
     [SerializeField] private Animator seitoPurple;
     [SerializeField] private Animator seitoWhite;
@@ -16,7 +16,7 @@ public class AnimatorController : MonoBehaviour
     [SerializeField] private Animator whiteGuide;
     [SerializeField] private Animator teacherGuide;
 
-    // ŒöŠJƒvƒƒpƒeƒB‚ğg—p‚µ‚ÄƒAƒjƒ[ƒ^[‚Ö‚ÌƒAƒNƒZƒX‚ğ’ñ‹Ÿ
+    // å…¬é–‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä½¿ç”¨ã—ã¦ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’æä¾›
     public Animator SeitoRed => seitoRed;
     public Animator SeitoPurple => seitoPurple;
     public Animator SeitoWhite => seitoWhite;
@@ -30,12 +30,13 @@ public class AnimatorController : MonoBehaviour
     public Animator WhiteGuide => whiteGuide;
     public Animator TeacherGuide => teacherGuide;
 
-    // Awakeƒƒ\ƒbƒh‚ÍƒIƒuƒWƒFƒNƒg‚ª—LŒø‚É‚È‚é‚Æ‚·‚®‚ÉŒÄ‚Ño‚³‚ê‚é
+    // Awakeãƒ¡ã‚½ãƒƒãƒ‰ã¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæœ‰åŠ¹ã«ãªã‚‹ã¨ã™ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹
     private void Awake()
     {
 
-        // ‚à‚µ‚Ç‚ê‚©‚ÌƒAƒjƒ[ƒ^[‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎƒGƒ‰[ƒƒbƒZ[ƒW‚ğ•\¦
-        if (seitoRed        == null ||
+        // ã‚‚ã—ã©ã‚Œã‹ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚¿ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º
+        if (
+            seitoRed        == null ||
             seitoPurple     == null ||
             seitoWhite      == null ||
             teacher         == null ||
@@ -46,7 +47,8 @@ public class AnimatorController : MonoBehaviour
             redGuide        == null ||
             purpleGuide     == null ||
             whiteGuide      == null ||
-           teacherGuide     == null )
+           teacherGuide     == null 
+           )
         {
             Debug.LogError("One or more Animator references are missing.");
         }

@@ -36,7 +36,6 @@ public class AnimationController : MonoBehaviour
 
     private void Awake()
     {
-
         // PlayerPrefsÇ©ÇÁê›íËílÇéÊìæ
         maxObjectsToSpawn = PlayerPrefs.GetInt("isMax");
         Debug.Log(maxObjectsToSpawn);
@@ -54,9 +53,9 @@ public class AnimationController : MonoBehaviour
         }
         else if (maxObjectsToSpawn == gameConstants.SecondSeason)
         {
-            Debug.Log("maxObjectsToSpawn=");
+            Debug.Log("maxObjectsToSpawn =");
             Debug.Log(maxObjectsToSpawn);
-            Debug.Log("gameConstants.SecondSeason=");
+            Debug.Log("gameConstants.SecondSeason =");
             Debug.Log(gameConstants.SecondSeason);
             uiManager.RoomImages[gameConstants.OBJECT_A].gameObject.SetActive(false);
             uiManager.RoomImages[gameConstants.OBJECT_B].gameObject.SetActive(false);
@@ -65,9 +64,9 @@ public class AnimationController : MonoBehaviour
         }
         else if (maxObjectsToSpawn == gameConstants.ThirdSeason)
         {
-            Debug.Log("maxObjectsToSpawn=");
+            Debug.Log("maxObjectsToSpawn =");
             Debug.Log(maxObjectsToSpawn);
-            Debug.Log("gameConstants.ThirdSeason=");
+            Debug.Log("gameConstants.ThirdSeason =");
             Debug.Log(gameConstants.ThirdSeason);
             for (int i = gameConstants.OBJECT_A; i <= gameConstants.OBJECT_D; i++)
             {
@@ -106,7 +105,6 @@ public class AnimationController : MonoBehaviour
         StartCoroutine(redColoutine);
         StartCoroutine(purpleColoutine);
         StartCoroutine(whiteColoutine);
-        
     }
 
     public IEnumerator redAnimation()
