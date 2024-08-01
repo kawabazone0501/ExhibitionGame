@@ -28,18 +28,20 @@ public class AnimationController : MonoBehaviour
     public int red_arrival = 0;
     public int purple_arrival = 0;
     public int white_arrival = 0;
-    // oŒ»‚µ‚½ƒIƒuƒWƒFƒNƒg‚Ì”
+    // å‡ºç¾ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ•°
     private int objectsSpawned = 0;
-    // oŒ»‚·‚éÅ‘å”
+    // å‡ºç¾ã™ã‚‹æœ€å¤§æ•°
     private int maxObjectsToSpawn;
     public int MaxObjectsSpawn => maxObjectsToSpawn;
 
+    private bool isCharacterShown = false;
+
     private void Awake()
     {
-        // PlayerPrefs‚©‚çİ’è’l‚ğæ“¾
+        // PlayerPrefsã‹ã‚‰è¨­å®šå€¤ã‚’å–å¾—
         maxObjectsToSpawn = PlayerPrefs.GetInt("isMax");
         Debug.Log(maxObjectsToSpawn);
-        // ğŒ‚É‰‚¶‚½ƒIƒuƒWƒFƒNƒg‚Ì”ñ•\¦ˆ—
+        // æ¡ä»¶ã«å¿œã˜ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®éè¡¨ç¤ºå‡¦ç†
         if (maxObjectsToSpawn == gameConstants.FirstSeason)
         {
             Debug.Log("maxObjectsToSpawn=");
@@ -111,6 +113,10 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
+            if (isCharacterShown)
+            {
+                yield break; // ä»–ã®ã‚­ãƒ£ãƒ©ãŒæ—¢ã«å‡ºç¾ã—ã¦ã„ã‚‹å ´åˆã€ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’çµ‚äº†
+            }
 
             if (!gameStateManager.IsStudents[gameConstants.StudentRED] && gameStateManager.IsClear)
             {
@@ -152,7 +158,7 @@ public class AnimationController : MonoBehaviour
                    );
                 }
                 
-                if (redColoutine != null) // Coroutine‚ªÀs’†‚Å‚ ‚ê‚Î’â~
+                if (redColoutine != null) // CoroutineãŒå®Ÿè¡Œä¸­ã§ã‚ã‚Œã°åœæ­¢
                 {
                     Debug.Log("stop_red");
                     StopCoroutine(redColoutine);
@@ -163,7 +169,7 @@ public class AnimationController : MonoBehaviour
                 Debug.Log("no_red");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
-            // ƒ‹[ƒv‚ÌÅŒã‚Å yield return null; ‚ğŒÄ‚Ño‚µ‚Ä–³ŒÀƒ‹[ƒv‚ğ‰ñ”ğ
+            // ãƒ«ãƒ¼ãƒ—ã®æœ€å¾Œã§ yield return null; ã‚’å‘¼ã³å‡ºã—ã¦ç„¡é™ãƒ«ãƒ¼ãƒ—ã‚’å›é¿
             yield return null;
         }
     }
@@ -172,7 +178,10 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
-           
+            if (isCharacterShown)
+            {
+                yield break; // ä»–ã®ã‚­ãƒ£ãƒ©ãŒæ—¢ã«å‡ºç¾ã—ã¦ã„ã‚‹å ´åˆã€ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’çµ‚äº†
+            }
             if (!gameStateManager.IsStudents[gameConstants.StudentPURPLE] && gameStateManager.IsClear)
             {
                 StopAnimation
@@ -181,7 +190,7 @@ public class AnimationController : MonoBehaviour
                         ref gameStateManager.IsStudents[gameConstants.StudentPURPLE]
                     );
             }
-            //w’è‚µ‚½Šm—¦‚ÅƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+            //æŒ‡å®šã—ãŸç¢ºç‡ã§ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
            
             else if (ShouldPlayAnimation(gameConstants.StudentPURPLE))
             {
@@ -212,7 +221,7 @@ public class AnimationController : MonoBehaviour
                             + gameConstants.WaitAnimationTime
                         );
                 }
-                if (purpleColoutine != null) // Coroutine‚ªÀs’†‚Å‚ ‚ê‚Î’â~
+                if (purpleColoutine != null) // CoroutineãŒå®Ÿè¡Œä¸­ã§ã‚ã‚Œã°åœæ­¢
                 {
                     Debug.Log("stop_purple");
                     StopCoroutine(purpleColoutine);
@@ -223,7 +232,7 @@ public class AnimationController : MonoBehaviour
                 Debug.Log("no_purple");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
-            // ƒ‹[ƒv‚ÌÅŒã‚Å yield return null; ‚ğŒÄ‚Ño‚µ‚Ä–³ŒÀƒ‹[ƒv‚ğ‰ñ”ğ
+            // ãƒ«ãƒ¼ãƒ—ã®æœ€å¾Œã§ yield return null; ã‚’å‘¼ã³å‡ºã—ã¦ç„¡é™ãƒ«ãƒ¼ãƒ—ã‚’å›é¿
             yield return null;
         }
     }
@@ -232,12 +241,16 @@ public class AnimationController : MonoBehaviour
     {
         while (true)
         {
+            if (isCharacterShown)
+            {
+                yield break; // ä»–ã®ã‚­ãƒ£ãƒ©ãŒæ—¢ã«å‡ºç¾ã—ã¦ã„ã‚‹å ´åˆã€ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’çµ‚äº†
+            }
             if (!gameStateManager.IsStudents[gameConstants.StudentWHITE] && gameStateManager.IsClear)
             {
                
                 StopAnimation(ref whiteColoutine, ref gameStateManager.IsStudents[gameConstants.StudentWHITE]);
             }
-            //w’è‚µ‚½Šm—¦‚ÅƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+            //æŒ‡å®šã—ãŸç¢ºç‡ã§ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
             
             else if (ShouldPlayAnimation(gameConstants.StudentWHITE))
             {
@@ -278,10 +291,10 @@ public class AnimationController : MonoBehaviour
             }
             else
             {
-                Debug.Log("no_gray");
+                Debug.Log("no_white");
                 yield return new WaitForSeconds(gameConstants.WaitTimeIfNotPlayed);
             }
-            // ƒ‹[ƒv‚ÌÅŒã‚Å yield return null; ‚ğŒÄ‚Ño‚µ‚Ä–³ŒÀƒ‹[ƒv‚ğ‰ñ”ğ
+            // ãƒ«ãƒ¼ãƒ—ã®æœ€å¾Œã§ yield return null; ã‚’å‘¼ã³å‡ºã—ã¦ç„¡é™ãƒ«ãƒ¼ãƒ—ã‚’å›é¿
             yield return null;
         }
     }
@@ -372,7 +385,7 @@ public class AnimationController : MonoBehaviour
     private IEnumerator AnimationCoroutine(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        // StopCoroutine ‚ğg—p‚¹‚¸‚ÉAŒ»İ‚ÌƒRƒ‹[ƒ`ƒ“‚ğI—¹‚·‚éB
+        // StopCoroutine ã‚’ä½¿ç”¨ã›ãšã«ã€ç¾åœ¨ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’çµ‚äº†ã™ã‚‹ã€‚
         yield break;
     }
     private void StopAnimation
@@ -386,7 +399,7 @@ public class AnimationController : MonoBehaviour
         StopCoroutine(coroutine);
     }
 
-    // FillAmount ‚ğ 0 ‚É‚·‚éŠÖ”
+    // FillAmount ã‚’ 0 ã«ã™ã‚‹é–¢æ•°
     public void ResetFillAmount()
     {
         gameStateManager.IsRedCard = true;

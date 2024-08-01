@@ -6942,7 +6942,6 @@ GameObject:
   - component: {fileID: 1943339062}
   - component: {fileID: 1943339061}
   - component: {fileID: 1943339060}
-  - component: {fileID: 1943339068}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7201,24 +7200,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1943339068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943339059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba46623d096d4f42b1f4608765e44a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image1: {fileID: 1530811734}
-  image2: {fileID: 1114296736}
-  showingImage1: 1
-  startTouchPosition: {x: 0, y: 0}
-  endTouchPosition: {x: 0, y: 0}
-  minSwipeDistance: 50
 --- !u!1 &1952757957
 GameObject:
   m_ObjectHideFlags: 0
