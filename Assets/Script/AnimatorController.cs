@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class AnimatorController : MonoBehaviour
 {
+   
+   
+
     // 各アニメーターをインスペクターから設定できるように[SerializeField]を使用
     [SerializeField] private Animator seitoRed;
     [SerializeField] private Animator seitoPurple;

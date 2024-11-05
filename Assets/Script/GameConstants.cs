@@ -46,19 +46,6 @@ public class GameConstants : ScriptableObject
     [SerializeField] private int bonusBaseScore = 30000;                    // ボーナススコア
     [SerializeField] private float totalTime = 180.0f;                      //制限時間　３分
     //------------------------------------------------------------------------------------------------
-    //ゲージに関係するクラス
-    public static class GaugeConstants
-    {
-        public static readonly float IncreaseValue = 0.025f;               // ゲージの増加量
-        public static readonly float DecreaseRateDecreaseValue= 0.01f;    // 毎秒の減少率を減らす量
-        public static readonly float RedIncreaseValue = 0.05f;
-        public static readonly float RedCardIncreaseValue = 0.1f;
-        public static readonly float MaxStickDistance = 75f;
-        public static readonly float RotationThreshold = 360f;
-        public static readonly float PurpleIncreaseValue = 0.1f;
-        public static readonly float WhiteIncreaseValue = 0.5f;
-    }
-
     // Player関連の定数
     private float increaseValue = 0.025f;               // ゲージの増加量
     private float decreaseRateDecreaseValue = 0.01f;    // 毎秒の減少率を減らす量              
@@ -91,64 +78,7 @@ public class GameConstants : ScriptableObject
     private bool isStudentLock = false;                                     // ↑の boolが変更される前にロックをかけ、確実に trueになったのを判断する
     private bool isObjectAllowed = false;                                   // 生徒が出現したことを示すフラグ
     private bool isClear = false;                                           // ゲームクリアの条件を満たしたかを判断するフラグ
-    //--------------------------------------------------------------------------------------------------
-    //UIの表示に関係するクラス
-    public static class UIConstants
-    {
-        public enum SceneObject
-        {
-            FirstSeasonCounter,
-            FirstSeasonTable,
-            SecondSeasonCounter,
-            SecondSeasonTable,
-            ThirdSeasonCounter,
-            ThirdSeasonTable
-        }
-        
-        public enum SchoolMember
-        {
-            Red,
-            Purple,
-            White,
-            Teacher
-        }
-        
-        public enum Season
-        {
-           FirstSeason,
-           SecondSeason,
-           ThirdSeason,
-        }
-
-        public enum Spawn
-        {
-           NULL,
-           FirstSpawn,
-           SecondSpawn,
-           ThirdSpawn
-        }
-
-        // ボタンや画像の非表示にする範囲を指定する
-        //(Lengthを使わないのは常に表示するボタンやUIがあるため)
-        public static readonly int StartImage = 1;
-        public static readonly int StartButton = 2;
-        public static readonly int EndImage = 11;
-        //赤の生徒の画像の範囲
-        public static readonly int StartImageRed = 2;
-        public static readonly int EndImageRed = 4;
-        public static readonly int StartButtonRed = 2;
-        public static readonly int EndButtonRed = 3;
-        //紫の生徒の画像の範囲
-        public static readonly int StartImagePurple = 5;
-        public static readonly int EndImagePurple = 9;
-        //白の生徒の画像の範囲
-        public static readonly int StartImageWhite = 10;
-        public static readonly int EndImageWhite = 11;
-        public static readonly int ButtonWhite;
-
-        public static readonly int FadePanel = 13;
-    }
-    
+    //-------------------------------------------------------------------------------------------------- 
     // 難易度ごとの背景のオブジェクトを保存する定数
     private const int object_A = 0;                                         //前期ステージの背景
     private const int object_B = 1;                                         //前期ステージのカウンター
@@ -157,17 +87,18 @@ public class GameConstants : ScriptableObject
     private const int object_E = 4;                                         //後期ステージの背景
     private const int object_F = 5;                                         //後期ステージのカウンター
     //--------------------------------------------------------------------------------------------------
-    // 3人の生徒の配列の定数
-    private const int studentRED = 0;
-    private const int studentPURPLE = 1;
-    private const int studentWHITE = 2;
+    // 3人の生徒の配列の定数(boolの配列に入れる定数)
+    private const int studentRED = 0;                                       //赤の生徒の定数
+    private const int studentPURPLE = 1;                                    //紫の生徒の定数
+    private const int studentWHITE = 2;                                     //白の生徒の定数
     // 先生の定数
-    private const int teacher = 3;
+    private const int teacher = 3;                                          
     //--------------------------------------------------------------------------------------------------
     // ボタンや画像の非表示にする範囲を指定する(常に表示するボタンやUIがあるため)
-    private const int neverDisplayImage = 1;
-    private const int neverDisplayButton = 2;
-    private const int endDisplayImage = 11;
+    //常に表示したい画像やボタンのためにLengthは使わない　　
+    private const int neverDisplayImage = 1;                                
+    private const int neverDisplayButton = 2;                               
+    private const int endDisplayImage = 11;                                 
     private const int endDisplayButton = 11;
 
     private const int startDisplayImageRed = 2;
@@ -187,40 +118,44 @@ public class GameConstants : ScriptableObject
     //--------------------------------------------------------------------------------------------------
 
     // 難易度ごとの背景のオブジェクトの切り替えを行うための比較のための定数
-    private const int firstSeason = 0;
-    private const int secondSeason = 1;
-    private const int thirdSeason = 2;
-    private const int firstSpawn = 1;
-    private const int secondSpawn = 2;
-    private const int thirdSpawn = 3;
+    //SeasonはUIの切り替えに使用
+    //Spawnは生徒の出現数を制限
+    private const int firstSeason = 0;                                      //前期
+    private const int secondSeason = 1;                                     //夏休み
+    private const int thirdSeason = 2;                                      //後期
+    private const int firstSpawn = 1;                                       //前期
+    private const int secondSpawn = 2;                                      //夏休み
+    private const int thirdSpawn = 3;                                       //後期
     //--------------------------------------------------------------------------------------------------
     // 再生するアニメーションクリップ
     [SerializeField] private AnimationClip[] animationClips;
 
     //---------------------------------------------------------------------------------------------------
     // アニメーションの待ち時間(待ち時間の秒数だけ待った後に処理を行う)
-    private const float waitAnimationTime = 0.5f;
-    private const float profileDisplayWaitingTime = 1.0f;
-    private const float fadeWaitTime = 3.0f;
-    private const float buttonDisplayWaitingTime = 2.0f;
-    private const float exitWaitingTime = 5.0f;
-    private const float waitTimeIfNotPlayed = 5.0f;
+    private const float waitAnimationTime = 0.5f;                           //アニメーションの時間+待つ時間
+    private const float profileDisplayWaitingTime = 1.0f;                   //プロフィール呼び出しの待ち時間
+    private const float fadeWaitTime = 3.0f;                                //フェードアウト後に呼び出す関数の待ち時間
+    private const float buttonDisplayWaitingTime = 2.0f;                    //クリア後に呼び出す関数の待ち時間
+    private const float exitWaitingTime = 7.0f;                             //生徒対応後に呼び出す関数の待ち時間
+    private const float waitTimeIfNotPlayed = 5.0f;                         //生徒が出現しなかった際の待ち時間
     //---------------------------------------------------------------------------------------------------
     // ボタンやゲージの配列でFillAmountの値を変更するゲージや値を変動させるボタンを指定する定数
-    private const int playerGauge = 0;
-    private const int redGauge = 4;
-    private const int purpleGauge = 6;
-    private const int whiteGauge = 10;
-    private const int redCard = 12;
+    private const int playerGauge = 0;                                      //プレイヤーのゲージ番号
+    private const int redGauge = 4;                                         //赤の生徒のゲージ番号
+    private const int purpleGauge = 6;                                      //紫の生徒のゲージ番号
+    private const int whiteGauge = 10;                                      //白の生徒のゲージ番号
+    private const int redCard = 12;                                         //レッドカードのゲージ番号
 
-    private const int redButtonLeft = 2;
-    private const int redButtonRight = 3;
-    private const int redCardButton = 4;
+    private const int redButtonLeft = 2;                                    //赤の生徒の左のボタンの番号
+    private const int redButtonRight = 3;                                   //赤の生徒の右のボタンの番号
+    private const int redCardButton = 4;                                    //レッドカードのボタンの番号
     //---------------------------------------------------------------------------------------------------
     // 赤の生徒のボタンの矢印のImageの切り替えのための定数
     private const int redButtonLeftArrow = 1;
     private const int redButtonRightArrow = 2;
     //---------------------------------------------------------------------------------------------------
+    //ガイドのアニメーションを出現させるためのBool値
+    //各生徒、先生個別に用意
     private bool redGuidePlayed = false;
     private bool purpleGuidePlayed = false;
     private bool whiteGuidePlayed = false;

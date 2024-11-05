@@ -110,6 +110,7 @@ public class AnimationController : MonoBehaviour
     }
 
     public IEnumerator redAnimation()
+
     {
         while (true)
         {

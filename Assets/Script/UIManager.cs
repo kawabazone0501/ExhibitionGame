@@ -353,7 +353,6 @@ public class UIManager : MonoBehaviour
                 }
                 else
                 {
-                    DontDestroyOnLoad(instance.gameObject);
                     Debug.Log("GameManager instance set to DontDestroyOnLoad.");
                 }
             }

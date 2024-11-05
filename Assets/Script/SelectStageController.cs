@@ -32,7 +32,7 @@ public class SelectStageController : MonoBehaviour
         Season[gameConstants.FirstSeason] = PlayerPrefs.GetInt("Score_1", 0);
         Season[gameConstants.SecondSeason] = PlayerPrefs.GetInt("Score_2", 0);
         Season[gameConstants.ThirdSeason] = PlayerPrefs.GetInt("Score_3", 0);
-        
+
         Fade_animator = FadeObj.GetComponent<Animator>();
         Fade_animator.SetBool("isFadeOut", true);
     }
@@ -44,18 +44,21 @@ public class SelectStageController : MonoBehaviour
 
         if (Season[gameConstants.FirstSeason] > MaxScores[gameConstants.FirstSeason])
         {
+            Debug.Log(Season[gameConstants.FirstSeason]);
             MaxScores[gameConstants.FirstSeason] = Season[gameConstants.FirstSeason];
             PlayerPrefs.SetInt("HighScore_1", MaxScores[gameConstants.FirstSeason]);
             PlayerPrefs.Save();
         }
         if (Season[gameConstants.SecondSeason] > MaxScores[gameConstants.SecondSeason])
         {
+            Debug.Log(Season[gameConstants.SecondSeason]);
             MaxScores[gameConstants.SecondSeason] = Season[gameConstants.SecondSeason];
             PlayerPrefs.SetInt("HighScore_2", MaxScores[gameConstants.SecondSeason]);
             PlayerPrefs.Save();
         }
         if (Season[gameConstants.ThirdSeason] > MaxScores[gameConstants.ThirdSeason])
         {
+            Debug.Log(Season[gameConstants.ThirdSeason]);
             MaxScores[gameConstants.ThirdSeason] = Season[gameConstants.ThirdSeason];
             PlayerPrefs.SetInt("HighScore_3", MaxScores[gameConstants.ThirdSeason]);
             PlayerPrefs.Save();

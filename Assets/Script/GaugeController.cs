@@ -235,7 +235,7 @@ public class GaugeController : MonoBehaviour
     void IncreaseGauge()
     {
         // ゲージの値を増加させる
-        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += GameConstants.GaugeConstants.IncreaseValue;
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += gameConstants.IncreaseValue;
         if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount >= gameConstants.GaugeFillAmountThresholdFull && !gameStateManager.IsClear)
         {
             gameStateManager.IsClear = true;
@@ -269,7 +269,7 @@ public class GaugeController : MonoBehaviour
     {
         // ゲージの値を毎秒の減少率に応じて減少させる
         //gaugeImage.fillAmount -= currentDecreaseRate * Time.deltaTime;
-        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= GameConstants.GaugeConstants.DecreaseRateDecreaseValue * Time.deltaTime;
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= gameConstants.DecreaseRateDecreaseValue * Time.deltaTime;
 
         // ゲージの値を0から1の範囲にクランプする
         uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
