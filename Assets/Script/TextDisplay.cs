@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 public class TextDisplay : MonoBehaviour
 {
-    [SerializeField] private Text displayText;// 画面に表示するTextコンポーネント
+    [SerializeField] private Text displayText;   // 画面に表示するTextコンポーネント
+    [SerializeField] private string filePath = "操作説明"; // Resourcesフォルダ内の.txtファイル名
 
-    [SerializeField] private string filePath = "操作説明";// Resourcesフォルダ内の.txtファイル名
-
-
+    // 複数アニメーションを制御できるようにする
+    [SerializeField] private List<Animator> animators;
 
     //private List<string> sections;
 
@@ -22,6 +22,7 @@ public class TextDisplay : MonoBehaviour
     private int currentSectionIndex = 0;
     private bool isDisplaying = false;
     private bool isHidden = false;
+    private bool isTextVisible = false;         // テキスト表示中かどうか
 
 
     void Start()
@@ -172,19 +173,24 @@ public class TextDisplay : MonoBehaviour
             if (currentSection == "<hide>")
             {
                 HideSection();
-                yield return new WaitUntil(() => !isHidden); // HideSection()が終了するまで待機
-                currentSectionIndex++;
-                continue; // 次のセクションに進む
+                yield break; // 非表示時は一旦停止、NextSectionで再開
             }
 
             if (currentSection == "<show>")
             {
                 ShowNextSection();
-                yield return new WaitUntil(() => !isHidden); // ShowNextSection()が終了するまで待機
-                currentSectionIndex++;
-                continue; // 次のセクションに進む
+                yield break; // 再表示時も停止、NextSectionで再開
             }
 
+            // < Animation > タグの検出と処理
+            if (currentSection.Contains("<Animation"))
+            {
+                HandleAnimationTag(currentSection);
+                isDisplaying = false;
+                yield break; // 次はNextSectionで進める
+            }
+
+            // 通常テキスト表示
             string[] lines = currentSection.Split(new string[] { "\n" }, System.StringSplitOptions.None);
             foreach (string line in lines)
             {
@@ -195,6 +201,10 @@ public class TextDisplay : MonoBehaviour
                 }
                 displayText.text += "\n";
             }
+
+            if (currentSectionIndex < 0) currentSectionIndex = 0;
+            if (currentSectionIndex >= sections.Count) currentSectionIndex = sections.Count - 1;
+
 
             isDisplaying = false;
             Debug.Log("テキスト終了");
@@ -215,6 +225,7 @@ public class TextDisplay : MonoBehaviour
         {
             displayText.gameObject.SetActive(false); // 全てのセクションが表示されたらテキストを非表示にする
         }
+
     }
 
     public void HideSection()
@@ -237,6 +248,57 @@ public class TextDisplay : MonoBehaviour
                 currentSectionIndex++;
                 //StartCoroutine(DisplayText());
             }
+        }
+    }
+
+    private void HandleAnimationTag(string line)
+    {
+        // 例: <Animation object="Player" trigger="Jump">
+        string objectName = GetAttributeValue(line, "object");
+        string triggerName = GetAttributeValue(line, "trigger");
+
+        foreach (var anim in animators)
+        {
+            if (anim.gameObject.name == objectName)
+            {
+                anim.SetTrigger(triggerName);
+                Debug.Log($"アニメーション再生: {objectName} → {triggerName}");
+                break;
+            }
+        }
+    }
+
+    private string GetAttributeValue(string line, string attribute)
+    {
+        string search = attribute + "=\"";
+        int start = line.IndexOf(search) + search.Length;
+        int end = line.IndexOf("\"", start);
+        return line.Substring(start, end - start);
+    }
+
+    // アニメーション呼び出し処理
+    private void TriggerAnimation(string line)
+    {
+        string objectName = GetAttributeValue(line, "object");
+        string triggerName = GetAttributeValue(line, "trigger");
+
+        if (string.IsNullOrEmpty(objectName) || string.IsNullOrEmpty(triggerName))
+        {
+            Debug.LogWarning("Animationタグの属性が不正です: " + line);
+            return;
+        }
+
+        GameObject target = GameObject.Find(objectName);
+        if (target == null)
+        {
+            Debug.LogWarning("対象オブジェクトが見つかりません: " + objectName);
+            return;
+        }
+
+        Animator animator = target.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetTrigger(triggerName);
         }
     }
 }

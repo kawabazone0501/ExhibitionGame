@@ -120,9 +120,9 @@ public class GameConstants : ScriptableObject
     // 難易度ごとの背景のオブジェクトの切り替えを行うための比較のための定数
     //SeasonはUIの切り替えに使用
     //Spawnは生徒の出現数を制限
-    private const int firstSeason = 0;                                      //前期
-    private const int secondSeason = 1;                                     //夏休み
-    private const int thirdSeason = 2;                                      //後期
+    private const int firstSeason = 1;                                      //前期
+    private const int secondSeason = 2;                                     //夏休み
+    private const int thirdSeason = 3;                                      //後期
     private const int firstSpawn = 1;                                       //前期
     private const int secondSpawn = 2;                                      //夏休み
     private const int thirdSpawn = 3;                                       //後期
