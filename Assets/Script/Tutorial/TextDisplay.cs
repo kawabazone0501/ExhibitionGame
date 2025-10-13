@@ -216,14 +216,20 @@ public class TextDisplay : MonoBehaviour
 
     public void NextSection()
     {
-        if (!isDisplaying && currentSectionIndex < sections.Count - 1)
+        if (isHidden)
+        {
+            // 非表示中なら再表示
+            ShowNextSection();
+            StartCoroutine(DisplayText());
+        }
+        else if (!isDisplaying && currentSectionIndex < sections.Count - 1)
         {
             currentSectionIndex++;
             StartCoroutine(DisplayText());
         }
         else if (currentSectionIndex >= sections.Count - 1)
         {
-            displayText.gameObject.SetActive(false); // 全てのセクションが表示されたらテキストを非表示にする
+            displayText.gameObject.SetActive(false);
         }
 
     }
@@ -243,11 +249,7 @@ public class TextDisplay : MonoBehaviour
         {
             isHidden = false;
             displayText.gameObject.SetActive(true);
-            if (currentSectionIndex < sections.Count - 1)
-            {
-                currentSectionIndex++;
-                //StartCoroutine(DisplayText());
-            }
+            currentSectionIndex++; // 次のセクションから再開
         }
     }
 
