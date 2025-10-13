@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
@@ -8,12 +6,6 @@ public class GameStateManager : MonoBehaviour
 
     [SerializeField]
     private GameConstants gameConstants;
-
-
-    private void Awake()
-    {
-        
-    }
 
     public static GameStateManager Instance
     {
@@ -115,6 +107,55 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public bool RedGuidePlayed
+    {
+        get => gameConstants.RedGuidePlayed;
+        set
+        {
+            Debug.Log($"RedGuidePlayed changed from {gameConstants.RedGuidePlayed} to {value}");
+            gameConstants.RedGuidePlayed = value;
+        }
+    }
+
+    public bool PurpleGuidePlayed
+    {
+        get=>gameConstants.PurpleGuidePlayed;
+        set
+        {
+            Debug.Log($"PurpleGuidePlayed changed from {gameConstants.PurpleGuidePlayed} to {value}");
+            gameConstants.PurpleGuidePlayed = value;
+        }
+    }
+
+    public bool WhiteGuidePlayed
+    {
+        get => gameConstants.WhiteGuidePlayed;
+        set
+        {
+            Debug.Log($"WhiteGuidePlayed changed from {gameConstants.WhiteGuidePlayed} to {value}");
+            gameConstants.WhiteGuidePlayed = value;
+        }
+    }
+
+    public bool TeacherGuidePlayed
+    {
+        get => gameConstants.TeacherGuidePlayed;
+        set
+        {
+            Debug.Log($"TeacherGuidePlayed changed from {gameConstants.TeacherGuidePlayed} to {value}");
+            gameConstants.TeacherGuidePlayed = value;
+        }
+    }
+
+    public bool IsTutorial
+    {
+        get=>gameConstants.IsTutorial;
+        set
+        {
+            Debug.Log($"IsTutorial changed from {gameConstants.IsTutorial} to {value}");
+            gameConstants.IsTutorial = value;
+        }
+    }
     public void SetAllStudentsFalse()
     {
         Debug.Log("SetAllStudentsFalse called");
@@ -123,11 +164,16 @@ public class GameStateManager : MonoBehaviour
             IsStudents[i] = false;
             Debug.Log($"IsStudents[{i}] set to false");
         }
+
         IsStudentLock = false;
         IsObjectAllowed = false;
         IsClear = false;
         IsButtonPressed = false;
         IsButton1Enabled = false;
         IsButton2Enabled = false;
+        RedGuidePlayed = false;
+        PurpleGuidePlayed = false;
+        WhiteGuidePlayed = false;
+        TeacherGuidePlayed = false;
     }
 }

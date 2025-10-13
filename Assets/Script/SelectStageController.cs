@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEditor.Tilemaps;
 
 public class SelectStageController : MonoBehaviour
 {
     [SerializeField] private GameConstants gameConstants;
-
     Animator Fade_animator;
     [SerializeField] private GameObject FadeObj;
 
@@ -33,10 +29,10 @@ public class SelectStageController : MonoBehaviour
 
     private void Awake()
     {
-        Season[gameConstants.FirstScore] = PlayerPrefs.GetInt("Score_1", 0);
-        Season[gameConstants.SecondScore] = PlayerPrefs.GetInt("Score_2", 0);
-        Season[gameConstants.ThirdScore] = PlayerPrefs.GetInt("Score_3", 0);
-        
+        Season[gameConstants.FirstSeason - 1] = PlayerPrefs.GetInt("Score_1", 0);
+        Season[gameConstants.SecondSeason - 1] = PlayerPrefs.GetInt("Score_2", 0);
+        Season[gameConstants.ThirdSeason - 1] = PlayerPrefs.GetInt("Score_3", 0);
+
         Fade_animator = FadeObj.GetComponent<Animator>();
         Fade_animator.SetBool("isFadeOut", true);
     }
@@ -46,22 +42,25 @@ public class SelectStageController : MonoBehaviour
     {
         animator = profileObj.GetComponent<Animator>();
 
-        if (Season[gameConstants.FirstScore] > MaxScores[gameConstants.FirstScore])
+        if (Season[gameConstants.FirstSeason - 1] > MaxScores[gameConstants.FirstSeason - 1])
         {
-            MaxScores[gameConstants.FirstScore] = Season[gameConstants.FirstScore];
-            PlayerPrefs.SetInt("HighScore_1", MaxScores[gameConstants.FirstScore]);
+            Debug.Log(Season[gameConstants.FirstSeason - 1]);
+            MaxScores[gameConstants.FirstSeason - 1] = Season[gameConstants.FirstSeason - 1];
+            PlayerPrefs.SetInt("HighScore_1", MaxScores[gameConstants.FirstSeason - 1]);
             PlayerPrefs.Save();
         }
-        if (Season[gameConstants.SecondScore] > MaxScores[gameConstants.SecondScore])
+        if (Season[gameConstants.SecondSeason - 1] > MaxScores[gameConstants.SecondSeason - 1])
         {
-            MaxScores[gameConstants.SecondScore] = Season[gameConstants.SecondScore];
-            PlayerPrefs.SetInt("HighScore_2", MaxScores[gameConstants.SecondScore]);
+            Debug.Log(Season[gameConstants.SecondSeason - 1]);
+            MaxScores[gameConstants.SecondSeason - 1] = Season[gameConstants.SecondSeason - 1];
+            PlayerPrefs.SetInt("HighScore_2", MaxScores[gameConstants.SecondSeason - 1]);
             PlayerPrefs.Save();
         }
-        if (Season[gameConstants.ThirdScore] > MaxScores[gameConstants.ThirdScore])
+        if (Season[gameConstants.ThirdSeason - 1] > MaxScores[gameConstants.ThirdSeason - 1])
         {
-            MaxScores[gameConstants.ThirdScore] = Season[gameConstants.ThirdScore];
-            PlayerPrefs.SetInt("HighScore_3", MaxScores[gameConstants.ThirdScore]);
+            Debug.Log(Season[gameConstants.ThirdSeason - 1]);
+            MaxScores[gameConstants.ThirdSeason - 1] = Season[gameConstants.ThirdSeason - 1];
+            PlayerPrefs.SetInt("HighScore_3", MaxScores[gameConstants.ThirdSeason - 1]);
             PlayerPrefs.Save();
         }
 
@@ -74,35 +73,47 @@ public class SelectStageController : MonoBehaviour
             highScoreTexts[i].text = "High Score: " + MaxScores[i].ToString("N0");
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    
     public void First_Season()
     {
-        Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = gameConstants.FirstScore;
+        /*Fade_animator.SetBool("isFadeIn", true);
+        MaxSpawn = gameConstants.FirstSeason;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
-    }
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.FirstSpawn);
 
+    }
     public void Second_Season()
     {
-        Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = gameConstants.SecondScore;
+        /*Fade_animator.SetBool("isFadeIn", true);
+        MaxSpawn = gameConstants.SecondSeason;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
-        Invoke("LoadGameScene", gameConstants.FadeWaitTime);
+        Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.SecondSpawn);
+
     }
 
     public void Third_Season()
     {
+        /*  //Fade_animator.SetBool("isFadeIn", true);
+          //MaxSpawn = gameConstants.ThirdSeason;
+          //PlayerPrefs.SetInt("isMax", MaxSpawn);
+          //Debug.Log(MaxSpawn);
+          //PlayerPrefs.Save();
+          //Invoke("LoadGameScene", gameConstants.FadeWaitTime);*/
+        SeasonChoice(gameConstants.ThirdSpawn);
+    }
+
+    public void SeasonChoice(int maxSpawn)
+    {
         Fade_animator.SetBool("isFadeIn", true);
-        MaxSpawn = gameConstants.ThirdScore;
+        MaxSpawn = maxSpawn;
         PlayerPrefs.SetInt("isMax", MaxSpawn);
+        Debug.Log(MaxSpawn);
         PlayerPrefs.Save();
         Invoke("LoadGameScene", gameConstants.FadeWaitTime);
     }
@@ -114,26 +125,42 @@ public class SelectStageController : MonoBehaviour
 
     public void RedCall()
     {
-        animator.SetBool("isRed", true);
+        /*animator.SetBool("isRed", true);
         profileCurrent = gameConstants.StudentRED;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isRed", gameConstants.StudentRED);
     }
     public void PurpleCall()
     {
-        animator.SetBool("isPurple", true);
+        /*animator.SetBool("isPurple", true);
         profileCurrent = gameConstants.StudentPURPLE;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isPurple", gameConstants.StudentPURPLE);
     }
     public void WhiteCall()
     {
-        animator.SetBool("isWhite", true);
+        /*animator.SetBool("isWhite", true);
         profileCurrent = gameConstants.StudentWHITE;
-        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isWhite", gameConstants.StudentWHITE);
     }
     public void TeacherCall()
     {
-        animator.SetBool("isKobayashi", true);
+        /*animator.SetBool("isTeacher", true);
         profileCurrent = gameConstants.Teacher;
+        Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);*/
+
+        ProfileCall("isTeacher", gameConstants.Teacher);
+    }
+
+
+    public void ProfileCall(string animationName,int ProfileCurrent)
+    {
+        animator.SetBool(animationName, true);
+        profileCurrent = ProfileCurrent;
         Invoke("OpenProfile", gameConstants.ProfileDisplayWaitingTime);
     }
     public void OpenProfile()
@@ -146,7 +173,7 @@ public class SelectStageController : MonoBehaviour
         animator.SetBool("isRed", false);
         animator.SetBool("isPurple", false);
         animator.SetBool("isWhite", false);
-        animator.SetBool("isKobayashi", false);
+        animator.SetBool("isTeacher", false);
     }
 }
 

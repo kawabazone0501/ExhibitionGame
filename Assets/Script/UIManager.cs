@@ -4,19 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class GameManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     /*
-        GameManager
+        UIManager
             
-        UI‚ğ1‚Â‚ÌƒXƒNƒŠƒvƒg‚Å‚Ü‚Æ‚ß‚ÄQÆ‚³‚¹‚é
+        UIã‚’1ã¤ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ã¾ã¨ã‚ã¦å‚ç…§ã•ã›ã‚‹
         
-        ŠeƒXƒNƒŠƒvƒg‚Ì
+        å„ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ä½¿ã†Imageã‚„Buttonã‚’1ã¤ã«ã¾ã¨ã‚ã¦ã“ã“ã§ã¾ã¨ã‚ã¦å‚ç…§ã•ã›ã‚‹
      
      */
 
     [SerializeField] private GameConstants gameConstants;
-    private static GameManager instance;
+    private static UIManager instance;
 
     [SerializeField] private StickController stickController;
     [SerializeField] private AnimationController animationController;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
 
     //--------------------------------------------------------------------------------
-    //ƒvƒŒƒCƒ„[ŠÖ˜A‚ÌUI
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼é–¢é€£ã®UI
     //--------------------------------------------------------------------------------
    
     [SerializeField] private Image[] gaugeImages;
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image pausePanel;
 
     //--------------------------------------------------------------------------------
-    // ƒfƒŠƒQ[ƒg‚Ì’è‹`
+    // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆã®å®šç¾©
     private Action<int, int> redHide;
     private Action<int, int> redShow;
     private Action<int, int> purpleHide;
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     private Action<int, int> pauseHide;
     private Action<int, int> pauseShow;
 
-    // ƒfƒŠƒQ[ƒg‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚ÌƒvƒƒpƒeƒB
+    // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     public Action<int, int> RedHide => redHide;
     public Action<int, int> RedShow => redShow;
     public Action<int, int> PurpleHide => purpleHide;
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 
     public void FunctionNameConversion()
     {
-        // ƒfƒŠƒQ[ƒg•Ï”‚ÉŠÖ”‚ğ‘ã“ü
+        // ãƒ‡ãƒªã‚²ãƒ¼ãƒˆå¤‰æ•°ã«é–¢æ•°ã‚’ä»£å…¥
         redHide = RedHideImages;
         redShow = RedShowImages;
         purpleHide = PurpleHideImages;
@@ -149,15 +149,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // ‚·‚×‚Ä‚Ì‰æ‘œ‚ğˆê’U”ñ•\¦‚É‚·‚é
-        //HideImagesInRange (gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
-
-        // w’è‚³‚ê‚½”ÍˆÍ“à‚Ì‰æ‘œ‚Ì‚İ‚ğ•\¦‚·‚é
+        // æŒ‡å®šã•ã‚ŒãŸç¯„å›²å†…ã®ç”»åƒã®ã¿ã‚’è¡¨ç¤ºã™ã‚‹
         for (int i = start; i <= end; i++)
         {
             if (GaugeImages[i] != null)
             {
-                GaugeImages[i].enabled = true;  // ‰æ‘œ‚ğ•\¦‚·‚é
+                GaugeImages[i].enabled = true;  // ç”»åƒã‚’è¡¨ç¤ºã™ã‚‹
             }
         }
         
@@ -170,10 +167,10 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Invalid range provided.");
             return;
         }
-        // ‚·‚×‚Ä‚Ì‰æ‘œ‚ğˆê’U”ñ•\¦‚É‚·‚é
+        // ã™ã¹ã¦ã®ç”»åƒã‚’ä¸€æ—¦éè¡¨ç¤ºã«ã™ã‚‹
         //HideImagesInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
 
-        // w’è‚³‚ê‚½”ÍˆÍ“à‚Ì‰æ‘œ‚Ì‚İ‚ğ•\¦‚·‚é
+        // æŒ‡å®šã•ã‚ŒãŸç¯„å›²å†…ã®ç”»åƒã®ã¿ã‚’è¡¨ç¤ºã™ã‚‹
         for (int i = start; i <= end; i++)
         {
             if (buttons[i] != null)
@@ -343,20 +340,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static GameManager Instance
+    public static UIManager Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<GameManager>();
+                instance = FindObjectOfType<UIManager>();
                 if (instance == null)
                 {
                     Debug.LogError("GameManager instance not found in the scene.");
                 }
                 else
                 {
-                    DontDestroyOnLoad(instance.gameObject);
                     Debug.Log("GameManager instance set to DontDestroyOnLoad.");
                 }
             }
@@ -372,41 +368,14 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-       FunctionNameConversion();
-       HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
-       HideButtonsInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
+        FunctionNameConversion();
+        HideImagesInRange(gameConstants.NeverDisplayImage, gameConstants.EndDisplayImage);
+        HideButtonsInRange(gameConstants.NeverDisplayButton, gameConstants.EndDisplayButton);
     }
-
-
-    // ƒRƒ‹[ƒ`ƒ“‚ğŠJn‚·‚éƒƒ\ƒbƒh
-    //public void StartAnimation(float waitTime, string controllerName)
-    //{
-    //    StartCoroutine(AnimationCoroutine(waitTime, controllerName));
-    //}
-
-    //private IEnumerator AnimationCoroutine(float waitTime, string controllerName)
-    //{
-    //    yield return new WaitForSeconds(waitTime);
-
-    //    if (showImageActions.TryGetValue(controllerName, out var showImages))
-    //    {
-    //        showImages?.Invoke();
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Invalid controller name specified.");
-    //    }
-    //}
-
     
     private void Start()
     {
         Debug.Log("GameManager Start method called.");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

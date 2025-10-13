@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class TimerCountDown : MonoBehaviour
 {
     private Animator FadePanel;
     private Animator GameOverPanel;
     [SerializeField] private GameConstants gameConstants;
-    [SerializeField] private GameManager gameManager;
-    private float timeRemaining;//ÉQÅ[ÉÄÇÃécÇËéûä‘
+    [SerializeField] private UIManager uiManager;
+    private float timeRemaining;//„Ç≤„Éº„É†„ÅÆÊÆã„ÇäÊôÇÈñì
 
     private void Awake()
     {
@@ -55,7 +53,7 @@ public class TimerCountDown : MonoBehaviour
     {
         int minutes = Mathf.FloorToInt(timeRemaining / 60);
         int seconds = Mathf.FloorToInt(timeRemaining % 60);
-        gameManager.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        uiManager.TimerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void ButtonChoice()
@@ -65,19 +63,21 @@ public class TimerCountDown : MonoBehaviour
 
     public void TitleButton()
     {
-        if (gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSeason)
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSpawn)
         {
-            PlayerPrefs.SetInt("Score_1", gameManager.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_1", uiManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSeason)
+        if(uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSpawn)
         {
-            PlayerPrefs.SetInt("Score_2", gameManager.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_2", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
-        else if(gameManager.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSeason)
+        if(uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSpawn)
         {
-            PlayerPrefs.SetInt("Score_3", gameManager.GetGaugeController().Score);
+            PlayerPrefs.SetInt("Score_3", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
             PlayerPrefs.Save();
         }
        FadePanel.SetBool("isFadeIn", true);
@@ -86,8 +86,29 @@ public class TimerCountDown : MonoBehaviour
     }
     public void SelectButton()
     {
-       FadePanel.SetBool("isFadeIn", true);
-       StartCoroutine(SelectSceneLoad());
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.FirstSpawn)
+        {
+            PlayerPrefs.SetInt("Score_1", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.SecondSpawn)
+        {
+            PlayerPrefs.SetInt("Score_2", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
+        if (uiManager.GetAnimationController().MaxObjectsSpawn == gameConstants.ThirdSpawn)
+        {
+            PlayerPrefs.SetInt("Score_3", uiManager.GetGaugeController().Score);
+            Debug.Log(uiManager.GetGaugeController().Score);
+            PlayerPrefs.Save();
+        }
+
+        
+        FadePanel.SetBool("isFadeIn", true);
+
+        StartCoroutine(SelectSceneLoad());
     }
 
     private IEnumerator SelectSceneLoad()
@@ -96,6 +117,7 @@ public class TimerCountDown : MonoBehaviour
         SceneManager.LoadScene("StageSelectScene");
     }
 
+   
     private IEnumerator TitleSceneLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime);

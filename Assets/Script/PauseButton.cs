@@ -1,23 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public class PauseButton : MonoBehaviour
 {
     private int previousSceneIndex;
 
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private GameConstants gameConstants;
 
     private Animator FadePanel;
 
-    // Start is called before the first frame update
     private void Awake()
     {
-        AnimatorController animatorController = gameManager.GetComponent<AnimatorController>();
+        AnimatorController animatorController = uiManager.GetComponent<AnimatorController>();
         if(animatorController != null )
         {
             FadePanel = animatorController.FadePanel;
@@ -27,14 +24,14 @@ public class PauseButton : MonoBehaviour
     
     public void OnPausePanel()
     {
-       gameManager.PauseShow(6,8);
+        uiManager.PauseShow(6,8);
         Time.timeScale = 0.0f;
     }
 
     public void OffPausePanel()
     {
         Time.timeScale = 1.0f;
-        gameManager.PauseHide(6,8);
+        uiManager.PauseHide(6,8);
     }
 
     public void OnSelectButton()
@@ -48,10 +45,10 @@ public class PauseButton : MonoBehaviour
     private IEnumerator OnSelectLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime);
-        // ‘O‚ÌƒV[ƒ“‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾‚·‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—ã™ã‚‹
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 1;
 
-        // ‘O‚ÌƒV[ƒ“‚É–ß‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
         SceneManager.LoadScene(previousSceneIndex);
     }
 
@@ -60,15 +57,16 @@ public class PauseButton : MonoBehaviour
         Time.timeScale = 1.0f;
         FadePanel.SetBool("isFadeIn", true);
         StartCoroutine(OnTitleLoad());
-    }
+    }  
+
 
     public IEnumerator OnTitleLoad()
     {
         yield return new WaitForSeconds(gameConstants.FadeWaitTime); 
-        // ‘O‚ÌƒV[ƒ“‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾‚·‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—ã™ã‚‹
         previousSceneIndex = SceneManager.GetActiveScene().buildIndex - 2;
 
-        // ‘O‚ÌƒV[ƒ“‚É–ß‚é
+        // å‰ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
         SceneManager.LoadScene(previousSceneIndex);
     }
 }

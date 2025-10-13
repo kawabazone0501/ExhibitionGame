@@ -13,15 +13,25 @@ public class GaugeController : MonoBehaviour
     private Animator SeitoWhite;
     private Animator Phone;
     private Animator GameClearPanel;
+    private Animator RedGuide;
+    private Animator TeacherGuide;
+    private Animator Teacher;
+
 
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private GameStateManager gameStateManager;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
 
     private int Bonus = 0;
     private int score = 0;
     public int Score => score;
-    
+
+    private bool RedGuidePlayed = false;
+    private bool TeacherGuidePlayed = false;
+
+    private bool isTeacherWork = false;
+    private float DelayTime = 3.0f;
+
     private void Awake()
     {
         
@@ -34,48 +44,66 @@ public class GaugeController : MonoBehaviour
             SeitoWhite = animatorController.SeitoWhite;
             Phone = animatorController.Phone;
             GameClearPanel = animatorController.GameClearPanel;
+            RedGuide = animatorController.RedGuide;
+            TeacherGuide = animatorController.TeacherGuide;
+            Teacher = animatorController.Teacher;
         }        
     }
     
     void Update()
     {
-        // ƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚Ì‚İŒ¸­‚³‚¹‚é
+        // ãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¦ã„ãªã„ã¨ãã®ã¿æ¸›å°‘ã•ã›ã‚‹
         if (!gameStateManager.IsButtonClicked  && !gameStateManager.IsClear)
         {
             DecreaseGauge();
         }
-        else if (gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount > gameConstants.GaugeFillAmountThresholdReset && !gameStateManager.IsClear)
+        else if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount > gameConstants.GaugeFillAmountThresholdReset && !gameStateManager.IsClear)
         {
             DecreaseGauge();
+        }
+        if(!gameStateManager.TeacherGuidePlayed)
+        {
+            gameStateManager.TeacherGuidePlayed = true;
+            TeacherGuide.SetBool("isTeacherGuide", true);
         }
     }
 
     public void RedCardIncreaseFillAmount()
     {
         Debug.Log("red");
-        // FillAmount‚ª1.0–¢–‚Ìê‡‚Ì‚İFillAmount‚ğ‘‚â‚·
-        if (gameManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+        // FillAmountãŒ1.0æœªæº€ã®å ´åˆã®ã¿FillAmountã‚’å¢—ã‚„ã™
+        if (uiManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
         {
             Debug.Log("card");
-            // FillAmount‚ğ‘‚â‚·
-            gameManager.GaugeImages[gameConstants.RedCard].fillAmount += gameConstants.RedCardFillAmountIncrement;
+            // FillAmountã‚’å¢—ã‚„ã™
+            uiManager.GaugeImages[gameConstants.RedCard].fillAmount += gameConstants.RedCardFillAmountIncrement;
 
-            // FillAmount‚ª1.0–¢–‚Ìê‡Aƒ{ƒ^ƒ“‚ğ–³Œø‰»‚·‚é
-            if (gameManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+            // FillAmountãŒ1.0æœªæº€ã®å ´åˆã€ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹
+            if (uiManager.GaugeImages[gameConstants.RedCard].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
             {
-                gameManager.Buttons[gameConstants.RedCardButton].interactable = false;
+                uiManager.Buttons[gameConstants.RedCardButton].interactable = false;
             }
         }
-        // FillAmount‚ª1.0‚É’B‚µ‚½‚çƒ{ƒ^ƒ“‚ğ–³Œø‰»‚·‚é
+        // FillAmountãŒ1.0ã«é”ã—ãŸã‚‰ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹
         else
         {
-            gameManager.Buttons[gameConstants.RedCardButton].interactable = true;
+            uiManager.Buttons[gameConstants.RedCardButton].interactable = true;
         }
     }
 
     public void OnClickButton()
     {
-        // ƒ{ƒ^ƒ“‚ªŠù‚ÉƒNƒŠƒbƒN‚³‚ê‚Ä‚¢‚éê‡‚ÍADecreaseGauge()‚ğŒÄ‚Ño‚³‚È‚¢
+        if(gameStateManager.TeacherGuidePlayed&&!TeacherGuidePlayed)
+        {
+            TeacherGuidePlayed = true;
+            TeacherGuide.SetBool("isTeacherGuide", false);
+        }
+        if (!isTeacherWork)
+        {
+            Debug.Log("work");
+            StartCoroutine(AnimateWithDelay());
+        }
+        // ãƒœã‚¿ãƒ³ãŒæ—¢ã«ã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ã€DecreaseGauge()ã‚’å‘¼ã³å‡ºã•ãªã„
         if (
             !gameStateManager.IsButtonClicked && 
             !gameStateManager.IsStudents[gameConstants.StudentRED]&&
@@ -85,10 +113,31 @@ public class GaugeController : MonoBehaviour
         {
             Debug.Log("true");
             IncreaseGauge();
-            gameStateManager.IsButtonClicked = true; // ƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚±‚Æ‚ğ¦‚·ƒtƒ‰ƒO‚ğİ’è
+            gameStateManager.IsButtonClicked = true; // ãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸã“ã¨ã‚’ç¤ºã™ãƒ•ãƒ©ã‚°ã‚’è¨­å®š
         }
     }
+    private IEnumerator AnimateWithDelay()
+    {
+        Debug.Log("å…¥ã£ãŸ");
+        isTeacherWork = true;
+        // 50%ã®ç¢ºç‡ã§ã©ã¡ã‚‰ã‹ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒˆãƒªã‚¬ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
+        if (Random.value < 0.5f)
+        {
+            Debug.Log("PC");
+            Teacher.SetTrigger("PCWork");
+        }
+        else
+        {
+            Debug.Log("Document");
+            Teacher.SetTrigger("DocumentWork");
+        }
+        // å¤‰åŒ–ã—ãŸã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã™ã‚‹ã¾ã§å¾…æ©Ÿ
+        yield return new WaitForSeconds(DelayTime);
 
+        Teacher.SetTrigger("Wait");
+
+        isTeacherWork = false;
+    }   
     public void ClearScore()
     {
         GameClearPanel.SetBool("isScore", true);
@@ -99,9 +148,9 @@ public class GaugeController : MonoBehaviour
         }
 
         score = Bonus + gameConstants.BaseScore + 
-            gameManager.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
-            gameManager.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
-            gameManager.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
+            uiManager.GetAnimationController().red_arrival * gameConstants.RedArrivalScoreMultiplier +
+            uiManager.GetAnimationController().purple_arrival * gameConstants.PurpleArrivalScoreMultiplier + 
+            uiManager.GetAnimationController().white_arrival * gameConstants.WhiteArrivalScoreMultiplier;
 
         Debug.Log("Score");
         Invoke("UpdateCounterText", 1.5f);
@@ -109,115 +158,132 @@ public class GaugeController : MonoBehaviour
 
     void UpdateCounterText()
     {
-        if (gameManager.CounterText != null)
+        if (uiManager.CounterText != null)
         {
-            gameManager.CounterText.text = "ƒXƒRƒA : " + Score.ToString("N0");
+            uiManager.CounterText.text = "ã‚¹ã‚³ã‚¢ : " + Score.ToString("N0");
         }
         else
         {
             Debug.LogError("counterText is not set!");
         }
     }
-
-    // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚È‚­‚È‚Á‚½‚Æ‚«‚Ìˆ—
+    // ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œãªããªã£ãŸã¨ãã®å‡¦ç†
     public void OnButtonReleased()
     {
-        gameStateManager.IsButtonClicked = false; // ƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½ƒtƒ‰ƒO‚ğƒŠƒZƒbƒg‚µ‚ÄDecreaseGauge()‚ªÄ‚ÑŒÄ‚Ño‚³‚ê‚é‚æ‚¤‚É‚·‚é
+        gameStateManager.IsButtonClicked = false; // ãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦DecreaseGauge()ãŒå†ã³å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
         Debug.Log("false");
     }
 
-    // ƒ{ƒ^ƒ“1‚ªƒNƒŠƒbƒN‚³‚ê‚½‚Ìˆ—
+    // ãƒœã‚¿ãƒ³1ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     public void OnRedButton1Clicked()
     {
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        Teacher.SetBool("vsRed", true);
+        if (gameStateManager.RedGuidePlayed && !RedGuidePlayed)
+        {
+            RedGuidePlayed = true;
+            RedGuide.SetBool("isRedGuide", false);
+        }
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             IncreaseGauge_W();
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
         }
-        else if (!gameStateManager.IsButton2Enabled) // ƒ{ƒ^ƒ“2‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ì‚İƒ{ƒ^ƒ“1‚ğˆ—‚·‚é
+        else if (!gameStateManager.IsButton2Enabled) // ãƒœã‚¿ãƒ³2ãŒæŠ¼ã•ã‚Œã¦ã„ãªã„å ´åˆã®ã¿ãƒœã‚¿ãƒ³1ã‚’å‡¦ç†ã™ã‚‹
         {
             Debug.Log("1");
             RedCardIncreaseFillAmount();
             IncreaseGauge_W();
             gameStateManager.IsButton1Enabled = false;
             gameStateManager.IsButton2Enabled = true;
-            gameManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = true;
-            gameManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = false;
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = true;
+            uiManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = true;
+            uiManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = true;
         }
     }
 
-    // ƒ{ƒ^ƒ“2‚ªƒNƒŠƒbƒN‚³‚ê‚½‚Ìˆ—
+    // ãƒœã‚¿ãƒ³2ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
     public void OnRedButton2Clicked()
     {
+        Teacher.SetBool("vsRed", true);
+        if (gameStateManager.RedGuidePlayed && !RedGuidePlayed)
+        {
+            RedGuidePlayed = true;
+            RedGuide.SetBool("isRedGuide", false);
+        }
         Debug.Log("2");
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             IncreaseGauge_W();
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = false;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = false;
         }
-        else if (!gameStateManager.IsButton1Enabled) // ƒ{ƒ^ƒ“1‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚Ì‚İƒ{ƒ^ƒ“2‚ğˆ—‚·‚é
+        else if (!gameStateManager.IsButton1Enabled) // ãƒœã‚¿ãƒ³1ãŒæŠ¼ã•ã‚Œã¦ã„ãªã„å ´åˆã®ã¿ãƒœã‚¿ãƒ³2ã‚’å‡¦ç†ã™ã‚‹
         {
             Debug.Log("2");
             RedCardIncreaseFillAmount();
             IncreaseGauge_W();
             gameStateManager.IsButton1Enabled = true;
             gameStateManager.IsButton2Enabled = false;
-            gameManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = false;
-            gameManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = true; ;
-            gameManager.Buttons[gameConstants.RedButtonLeft].enabled = true;
-            gameManager.Buttons[gameConstants.RedButtonRight].enabled = false;
+            uiManager.GaugeImages[gameConstants.RedButtonLeftArrow].enabled = false;
+            uiManager.GaugeImages[gameConstants.RedButtonRightArrow].enabled = true; ;
+            uiManager.Buttons[gameConstants.RedButtonLeft].enabled = true;
+            uiManager.Buttons[gameConstants.RedButtonRight].enabled = false;
         }
     }
 
-    // ƒQ[ƒW‚ğ‘‰Á‚³‚¹‚éŠÖ”
+    // ã‚²ãƒ¼ã‚¸ã‚’å¢—åŠ ã•ã›ã‚‹é–¢æ•°
     void IncreaseGauge()
     {
-        // ƒQ[ƒW‚Ì’l‚ğ‘‰Á‚³‚¹‚é
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += gameConstants.IncreaseAmount;
-        if (gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount >= gameConstants.GaugeFillAmountThresholdFull && !gameStateManager.IsClear)
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’å¢—åŠ ã•ã›ã‚‹
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount += gameConstants.IncreaseValue;
+        if (uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount >= gameConstants.GaugeFillAmountThresholdFull && !gameStateManager.IsClear)
         {
             gameStateManager.IsClear = true;
             GameClearPanel.SetBool("isClear", true);
             Invoke("ClearScore", 1.5f);
         }
-        // ƒQ[ƒW‚Ì’l‚ğ0‚©‚ç1‚Ì”ÍˆÍ‚ÉƒNƒ‰ƒ“ƒv‚·‚é
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’0ã‹ã‚‰1ã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
     }
 
     void IncreaseGauge_W()
     {
-        if (gameManager.GaugeImages[gameConstants.RedGauge].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
+        if (uiManager.GaugeImages[gameConstants.RedGauge].fillAmount < gameConstants.GaugeFillAmountThresholdFull)
         {
-            // ƒQ[ƒW‚Ì’l‚ğ‘‰Á‚³‚¹‚é
-            gameManager.GaugeImages[gameConstants.RedGauge].fillAmount += gameConstants.RedIncreaseAmount;
+            // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’å¢—åŠ ã•ã›ã‚‹
+            uiManager.GaugeImages[gameConstants.RedGauge].fillAmount += gameConstants.RedIncreaseAmount;
         }
-        else if(gameManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+        else if(uiManager.GaugeImages[gameConstants.RedGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
         {
             gameStateManager.IsButton1Enabled = false;
             gameStateManager.IsButton2Enabled = false;
             gameStateManager.IsStudents[gameConstants.StudentRED] = false;
             OnGaugeFull_red();
         }
-        // ƒQ[ƒW‚Ì’l‚ğ0‚©‚ç1‚Ì”ÍˆÍ‚ÉƒNƒ‰ƒ“ƒv‚·‚é
-        gameManager.GaugeImages[gameConstants.RedGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.RedGauge].fillAmount);
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’0ã‹ã‚‰1ã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹
+        uiManager.GaugeImages[gameConstants.RedGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.RedGauge].fillAmount);
     }
 
-    // ƒQ[ƒW‚ğŒ¸­‚³‚¹‚éŠÖ”
+    // ã‚²ãƒ¼ã‚¸ã‚’æ¸›å°‘ã•ã›ã‚‹é–¢æ•°
     void DecreaseGauge()
     {
-        // ƒQ[ƒW‚Ì’l‚ğ–ˆ•b‚ÌŒ¸­—¦‚É‰‚¶‚ÄŒ¸­‚³‚¹‚é
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’æ¯ç§’ã®æ¸›å°‘ç‡ã«å¿œã˜ã¦æ¸›å°‘ã•ã›ã‚‹
         //gaugeImage.fillAmount -= currentDecreaseRate * Time.deltaTime;
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= gameConstants.DecreaseRateDecreaseAmount * Time.deltaTime;
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount -= gameConstants.DecreaseRateDecreaseValue * Time.deltaTime;
 
-        // ƒQ[ƒW‚Ì’l‚ğ0‚©‚ç1‚Ì”ÍˆÍ‚ÉƒNƒ‰ƒ“ƒv‚·‚é
-        gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(gameManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
+        // ã‚²ãƒ¼ã‚¸ã®å€¤ã‚’0ã‹ã‚‰1ã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹
+        uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount = Mathf.Clamp01(uiManager.GaugeImages[gameConstants.PlayerGauge].fillAmount);
     }
 
     public void RedCard()
     {
-        gameManager.GaugeImages[gameConstants.RedCard].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.GaugeImages[gameConstants.RedCard].fillAmount = gameConstants.GaugeFillAmountThresholdReset;
+        uiManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        uiManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
+        gameStateManager.IsStudents[gameConstants.StudentRED] = false;
+        gameStateManager.IsStudents[gameConstants.StudentPURPLE] = false;
+        gameStateManager.IsStudents[gameConstants.StudentWHITE] = false;
         SeitoRed.SetBool("isRedCard", true);
         SeitoPurple.SetBool("isRedCard", true);
         SeitoWhite.SetBool("isRedCard", true);
@@ -226,6 +292,12 @@ public class GaugeController : MonoBehaviour
 
     public void ResetAnimation()
     {
+        gameStateManager.IsStudents[gameConstants.StudentRED] = true;
+        gameStateManager.IsStudents[gameConstants.StudentPURPLE] = true;
+        gameStateManager.IsStudents[gameConstants.StudentWHITE] = true;
+        uiManager.RedShow(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        uiManager.PurpleShow(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.WhiteShow(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
         SeitoRed.SetBool("isRedCard", false);
         SeitoPurple.SetBool("isRedCard", false);
         SeitoWhite.SetBool("isRedCard", false);
@@ -239,8 +311,8 @@ public class GaugeController : MonoBehaviour
         Debug.Log("isRed");
         gameStateManager.IsButton1Enabled = false;
         gameStateManager.IsButton2Enabled = false;
-
-        gameManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
+        Teacher.SetBool("vsRed", false);
+        uiManager.RedHide(gameConstants.StartDisplayImageRed, gameConstants.EndDisplayImageRed);
 
 
         StartCoroutine(RedCoroutine());
@@ -249,9 +321,9 @@ public class GaugeController : MonoBehaviour
     private IEnumerator RedCoroutine()
     {
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if(gameManager.GetAnimationController() != null)
+        if(uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_Purple();
+            uiManager.GetAnimationController().Restart_Purple();
             
             StopCoroutine(RedCoroutine());
         }
@@ -262,7 +334,7 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("isPurple");
         SeitoPurple.SetBool("isPurple", false);
-        gameManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
+        uiManager.PurpleHide(gameConstants.StartDisplayImagePurple, gameConstants.EndDisplayImagePurple);
 
          StartCoroutine(PurpleCoroutine());
     }
@@ -271,9 +343,9 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_purple");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (gameManager.GetAnimationController() != null)
+        if (uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_Purple();
+            uiManager.GetAnimationController().Restart_Purple();
             
             StopCoroutine(PurpleCoroutine());
         }
@@ -285,7 +357,7 @@ public class GaugeController : MonoBehaviour
         SeitoWhite.SetBool("isWhite", false);
         Phone.SetBool("isCall", false);
          
-        gameManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
+        uiManager.WhiteHide(gameConstants.StartDisplayImageWhite, gameConstants.EndDisplayImageWhite);
  
         StartCoroutine(WhiteCoroutine());
     }
@@ -294,9 +366,10 @@ public class GaugeController : MonoBehaviour
     {
         Debug.Log("restart_White");
         yield return new WaitForSeconds(gameConstants.ExitWaitingTime);
-        if (gameManager.GetAnimationController() != null)
+        if (uiManager.GetAnimationController() != null)
         {
-            gameManager.GetAnimationController().Restart_White();
+            Debug.Log("stop_White");
+            uiManager.GetAnimationController().Restart_White();
             
             StopCoroutine(WhiteCoroutine());
         }

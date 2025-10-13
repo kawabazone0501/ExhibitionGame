@@ -1,19 +1,19 @@
-using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class LongPressButton : MonoBehaviour
 {
     [SerializeField] private GameConstants gameConstants;
     [SerializeField] private GameStateManager gameStateManager;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UIManager uiManager;
 
     private Animator SeitoWhite;
     private Animator Teacher;
     private Animator Phone;
-    // �Q�[�W�̌��݂̒l
+    private Animator WhiteGuide;
+    // ゲージの現在の値
     private float currentGaugeValue = 0.0f;
+
+    private bool isGuidePlayed = false;
     private void Start()
     {
 
@@ -23,19 +23,24 @@ public class LongPressButton : MonoBehaviour
             SeitoWhite = animatorController.SeitoWhite;
             Teacher = animatorController.Teacher;
             Phone = animatorController.Phone;
+            WhiteGuide = animatorController.WhiteGuide;
         }
     }
-    // �{�^���������ꂽ�Ƃ��̏���
+    // ボタンが押されたときの処理
     public void OnPointerDown()
     {
+        if (gameStateManager.WhiteGuidePlayed && !isGuidePlayed)
+        {
+            isGuidePlayed = true;
+            WhiteGuide.SetBool("isWhiteGuide", false);
+        }
         gameStateManager.IsButtonPressed = true;
         SeitoWhite.SetBool("isWhite", true);
         Phone.SetBool("isSupport", true);
         Phone.SetBool("isCall", false);
         Teacher.SetBool("vsWhite", true);
     }
-
-    // �{�^���������ꂽ�Ƃ��̏���
+    // ボタンが離されたときの処理
     public void OnPointerUp()
     {
         gameStateManager.IsButtonPressed = false;
@@ -44,7 +49,7 @@ public class LongPressButton : MonoBehaviour
         Teacher.SetBool("vsWhite", false);
     }
 
-    // �X�V����
+    // 更新処理
     void Update()
     {
         if (gameStateManager.IsButtonPressed)
@@ -54,22 +59,23 @@ public class LongPressButton : MonoBehaviour
                 currentGaugeValue += gameConstants.GaugeIncreaseRate * Time.deltaTime;
                 UpdateGauge();
             }
-            else if (gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
+            else if (uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount >= gameConstants.GaugeFillAmountThreshold)
             {
                 Teacher.SetBool("vsWhite", false);
                 Phone.SetBool("isSupport", false);
                 gameStateManager.IsButtonPressed = false;
                 gameStateManager.IsStudents[gameConstants.StudentWHITE] = false;
+                Debug.Log(gameStateManager.IsStudents[gameConstants.StudentWHITE]);
                 currentGaugeValue = 0.0f;
-                gameManager.GetGaugeController().OnGaugeFullWhite();
+                uiManager.GetGaugeController().OnGaugeFullWhite();
             }
         }
     }
-    // �Q�[�W�̍X�V
+    // ゲージの更新
     private void UpdateGauge()
     {
-        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;
+        uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount = currentGaugeValue / gameConstants.GaugeFillAmountThresholdFull;
 
-        gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount=Mathf.Clamp01(gameManager.GaugeImages[gameConstants.WhiteGauge].fillAmount);
+        uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount=Mathf.Clamp01(uiManager.GaugeImages[gameConstants.WhiteGauge].fillAmount);
     }
 }
